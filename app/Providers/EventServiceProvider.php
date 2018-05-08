@@ -13,9 +13,21 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Event' => [
-            'App\Listeners\EventListener',
-        ],
+	    'App\Events\TextMessageSent' => [
+	    	'App\Listeners\LogTextMessage',
+	    ],
+	    'App\Events\TextMessageFailed' => [
+	    	'App\Listeners\LogTextMessageFailure'
+	    ],
+	    'App\Events\PhoneValidationPerformed' => [
+	        'App\Listeners\LogPhoneValidationRecord',
+		    'App\Listeners\UpdatePhoneToIntlFormat',
+		    'App\Listeners\SendVerificationTextMessage'
+	    ],
+
+	    'App\Events\PhoneValidationFailed' => [
+	    	'App\Listeners\LogPhoneValidationFailure'
+	    ]
     ];
 
     /**

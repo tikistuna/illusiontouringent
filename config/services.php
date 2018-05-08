@@ -30,9 +30,20 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\User::class,
+        'model' => App\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+
+    'eztexting' => [
+        'user' => env('EZTEXTING_USER'),
+        'password' => env('EZTEXTING_PASSWORD')
+    ],
+
+	'nexmo' => [
+		'key' => env('NEXMO_KEY'),
+		'secret' => env('NEXMO_SECRET'),
+		'sms_from' => 12018173141,
+	],
 
 ];

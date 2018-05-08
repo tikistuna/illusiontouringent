@@ -24,8 +24,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('subscriber:collect')->dailyAt('03:40')->timezone('America/Chicago');
+		$schedule->command('urlclicks:refresh')->dailyAt('03:50')->timezone('America/Chicago');
+	    $schedule->command('texts:send')->hourly()->timezone('America/Chicago')->between('16:00', '20:00');
+
     }
 
     /**

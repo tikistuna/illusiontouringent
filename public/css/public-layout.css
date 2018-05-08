@@ -1,0 +1,77 @@
+
+.navbar {
+    opacity: 0.8;
+    border-bottom: #ffde00 3px solid;
+    padding-top: 0em !important; }
+
+.navbar a.dropdown-item:hover{
+    color: #000 !important;
+}
+
+.dark-overlay {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.background-img{
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.background-img img{
+    width: auto;
+    height: auto;
+    min-height: 100%;
+    min-width: 100%;
+}
+
+.event-section .event-section-overlay {
+    width: 100%;
+}
+
+.event-info{
+    font-size: 1.15em;
+}
+
+
+.hamburger_menu{
+    border: none !important;
+}
+
+#main-section .main-inner {
+    padding-top: 115px;
+}
+
+#main-section .card-form {
+    opacity: 0.9; }
+
+.navbar-dark .navbar-nav .nav-link{
+    color: #fff !important;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover{
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+#main-footer{
+    border-top: #ffde00 3px solid;
+}
+
+#main-title{
+    font-family: 'Noto Sans', sans-serif;
+    text-shadow: 1px 1px 0px #050505 , 2px 2px 0px #222, 3px 3px 0px #444, 4px 4px 0px #555, 6px 6px 0px rgba(220, 220, 220, 0.2);
+    font-weight: 700!important;
+}
+
+@media screen and (max-width: 30em){
+    #main-title{
+        text-shadow: 1px 1px 0px #050505 , 2px 2px 0px #222, 3px 3px 0px #444, 4px 4px 0px rgba(220, 220, 220, 0.4);
+    }
+}
+
+
+

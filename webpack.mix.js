@@ -12,4 +12,9 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+   .sass('resources/assets/sass/app.scss', 'public/css')
+    .js('resources/assets/js/admin_events.js', 'public/js')
+    .js('resources/assets/js/admin_cities.js', 'public/js')
+    .js('resources/assets/js/admin_ticket_sellers', 'public/js')
+    .js('resources/assets/js/admin_venues', 'public/js')
+    .js('resources/assets/js/admin_folders', 'public/js');

@@ -1,0 +1,43 @@
+body {
+    background: #fff;
+    color: #222;
+}
+
+.navbar {
+    opacity: 0.8;
+    border-bottom: #008ed6 3px solid;
+    padding-top: 0em !important; }
+
+.navbar a.dropdown-item:hover{
+    color: #000 !important;
+}
+
+#main-section {
+    z-index: 0;
+    background: url("../assets/backgrounds/concert.jpg") no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 1500px; }
+
+
+#main-section .dark-overlay {
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 1500px;
+}
+
+
+
+#main-section .main-inner {
+    padding-top: 115px;
+}
+
+#main-section .card-form {
+    opacity: 0.9; }
+
+
+
+
