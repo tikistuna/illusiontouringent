@@ -18,9 +18,8 @@ class PhotoController extends Controller
      */
     public function create()
     {
-	    $events = Event::orderBy('name', 'asc')
-		    ->get();
-	    $events_cities = array();
+	    $events = Event::doesntHave('photo')->orderBy('name', 'asc')->get();
+	    $events_cities = [];
 	    foreach($events as $event){
 	    	$events_cities[$event->id] = "{$event->name} en {$event->city->name}";
 	    }

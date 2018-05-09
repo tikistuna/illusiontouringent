@@ -19,6 +19,7 @@ $notifications = $user->notifications;
         <!-- Custom styles for this template-->
         <link href="/css/admin.css" rel="stylesheet">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        @yield('head')
     </head>
 
     <body class="fixed-nav sticky-footer bg-dark" id="page-top">
