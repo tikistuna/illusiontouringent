@@ -205,7 +205,7 @@ class EventController extends Controller
 	 */
 	public function api_index(){
 
-		return Event::with('city')->orderBy('name')->get()->toJson();
+		return Event::with('city')->orderBy('date', 'desc')->get()->toJson();
 
 
 	}
