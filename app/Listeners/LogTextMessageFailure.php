@@ -36,7 +36,7 @@ class LogTextMessageFailure
 	    $input['status'] = $event->response->status;
 	    $input['phone_number'] = $event->response->msisdn;
 	    $input['text_record_id'] = $event->response->messageId;
-	    $input['cost'] = $event->response->price;
+	    $input['cost'] = $event->response->price ?? 0.00;
 	    $input['action'] = 'Text Message (Failure)';
 
 	    $textRecord = TextRecord::create($input);
