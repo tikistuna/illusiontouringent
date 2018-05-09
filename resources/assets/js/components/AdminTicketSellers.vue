@@ -142,7 +142,7 @@
         data(){
             return{
                 ticket_sellers: [],
-                sort: 'name-asc',
+                sort: 'name',
                 showing: 10,
                 page: 1,
                 token: ''
@@ -151,11 +151,11 @@
 
         computed: {
             nameAsc: function(){
-                return (this.sort === 'name-asc');
+                return (this.sort === 'name');
             },
 
             nameDesc: function(){
-                return (this.sort === 'name-desc');
+                return (this.sort === '-name');
             },
 
             ticketSellersShowing: function(){

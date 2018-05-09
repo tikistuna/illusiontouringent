@@ -136,6 +136,8 @@
             axios.get('/api/admin/events').then(response => {
                 this.events = response.data;
                 this.eventsQueried = response.data;
+                let sort = document.querySelector("meta[name='sort']").content;
+                this.sortEvents(sort);
             }, response => {
                 swal('Oh no!', "An error occurred with the API", "error");
             });
@@ -148,13 +150,15 @@
                     swal('Oh no!', "An error occurred with the API", "error");
                 });
 
-        },
 
+
+        },
+	    
         data(){
             return{
                 events: [],
 	            eventsQueried: [],
-                sort: 'name-asc',
+                sort: '-date',
 	            showing: 10,
 	            page: 1,
                 token: '',
@@ -165,43 +169,43 @@
 
         computed: {
             eventAsc: function(){
-                return (this.sort === 'name-asc');
+                return (this.sort === 'name');
             },
 
             eventDesc: function(){
-                return (this.sort === 'name-desc');
+                return (this.sort === '-name');
             },
 
             cityAsc: function(){
-                return (this.sort === 'cityName-asc');
+                return (this.sort === 'cityName');
             },
 
             cityDesc: function(){
-                return (this.sort === 'cityName-desc');
+                return (this.sort === '-cityName');
             },
 
             dateAsc: function(){
-                return (this.sort === 'date-asc');
+                return (this.sort === 'date');
             },
 
             dateDesc: function(){
-                return (this.sort === 'date-desc');
+                return (this.sort === '-date');
             },
 
             venueAsc: function(){
-                return (this.sort === 'venueName-asc');
+                return (this.sort === 'venueName');
             },
 
             venueDesc: function(){
-                return (this.sort === 'venueName-desc');
+                return (this.sort === '-venueName');
             },
 
             urlClicksAsc: function(){
-                return (this.sort === 'urlClicks-asc');
+                return (this.sort === 'urlClicks');
             },
 
             urlClicksDesc: function(){
-                return (this.sort === 'urlClicks-desc');
+                return (this.sort === '-urlClicks');
             },
 
 	        eventsShowing: function(){
@@ -223,6 +227,7 @@
         methods: {
             sortEvents: function(property){
                 this.eventsQueried.sort(this.dynamicSort(property));
+                history.replaceState(null, '', '?sort=' + property);
             },
 
 	        pageOutOfRange: function(){
@@ -272,15 +277,8 @@
                     bool = bool || event.venueName.search(new RegExp(query, "i")) !== -1;
                     return bool;
                 });
-                console.log(eventsFiltered);
                 this.eventsQueried = eventsFiltered;
 	        },
-
-	        say: function(query){
-                this.events.forEach((showName) => {
-                   console.log(showName.name + ': ' + showName.name.search(new RegExp(query, "i")));
-                });
-	        }
         }
 
     }
