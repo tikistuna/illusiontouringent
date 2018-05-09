@@ -2,7 +2,7 @@
     <div class="card mb-3" id="events-table">
         <div class="card-header">
             <i class="fa fa-table"></i> Events
-            <a class="float-right text-dark" href="/admin/events/create">New Event</a>
+            <a class="float-right text-dark" href="/admin/oauth">New Event</a>
         </div>
         <div class="card-body">
             <div class="table-responsive">

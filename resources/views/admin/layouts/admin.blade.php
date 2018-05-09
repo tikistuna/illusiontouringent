@@ -50,7 +50,7 @@ $notifications = $user->notifications;
                                         <a href="/admin/events">All events</a>
                                     </li>
                                     <li>
-                                        <a href="/admin/events/create">Create Event</a>
+                                        <a href="/admin/oauth">Create Event</a>
                                     </li>
                                 </ul>
                             </li>
