@@ -5,9 +5,9 @@ export default{
             if(property[0] === '-'){
                 sortOrder = -1;
                 property = property.substr(1);
-                this.sort = property + '-desc';
+                this.sort = '-' + property ;
             }else{
-                this.sort = property + '-asc';
+                this.sort = property;
             }
 
             return function(a,b) {

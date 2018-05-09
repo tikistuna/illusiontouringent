@@ -154,7 +154,7 @@
             return{
                 events: [],
 	            eventsQueried: [],
-                sort: 'name-asc',
+                sort: '-name',
 	            showing: 10,
 	            page: 1,
                 token: '',
@@ -165,43 +165,43 @@
 
         computed: {
             eventAsc: function(){
-                return (this.sort === 'name-asc');
+                return (this.sort === 'name');
             },
 
             eventDesc: function(){
-                return (this.sort === 'name-desc');
+                return (this.sort === '-name');
             },
 
             cityAsc: function(){
-                return (this.sort === 'cityName-asc');
+                return (this.sort === 'cityName');
             },
 
             cityDesc: function(){
-                return (this.sort === 'cityName-desc');
+                return (this.sort === '-cityName');
             },
 
             dateAsc: function(){
-                return (this.sort === 'date-asc');
+                return (this.sort === 'date');
             },
 
             dateDesc: function(){
-                return (this.sort === 'date-desc');
+                return (this.sort === '-date');
             },
 
             venueAsc: function(){
-                return (this.sort === 'venueName-asc');
+                return (this.sort === 'venueName');
             },
 
             venueDesc: function(){
-                return (this.sort === 'venueName-desc');
+                return (this.sort === '-venueName');
             },
 
             urlClicksAsc: function(){
-                return (this.sort === 'urlClicks-asc');
+                return (this.sort === 'urlClicks');
             },
 
             urlClicksDesc: function(){
-                return (this.sort === 'urlClicks-desc');
+                return (this.sort === '-urlClicks');
             },
 
 	        eventsShowing: function(){
