@@ -85,7 +85,12 @@
                     event(new PhoneValidationPerformed($body, $phone));
                     return $validity;
                 }else{
-                    Log::error('Nexmo Validation Error', ['Request Id' => $body->request_id]);
+                	if(isset($body->request_id)){
+		                Log::error('Nexmo Validation Error', ['Request Id' => $body->request_id]);
+	                }else{
+                		Log::error('Nexmo Validation Error', ['Response Body' => json_encode($body)]);
+	                }
+
                     event(new PhoneValidationFailed($phone, $body));
                     throw new ValidatePhoneException('Nexmo Validation Error. Phone: ' . $phone->phone);
                 }
