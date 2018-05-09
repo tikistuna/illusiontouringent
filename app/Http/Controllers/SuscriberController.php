@@ -281,48 +281,6 @@ class SuscriberController extends Controller
 		return redirect('/');
 	}
 
-    /*
-    |------------------------------------------------------
-    | Helper Functions
-    |------------------------------------------------------
-    |
-    */
-
-    public function select_winner(Request $request){
-    	if($request->isMethod('get')){
-		    $cities = City::orderBy('name', 'asc')
-			    ->pluck('name', 'id')
-			    ->all();
-    		return view('admin.select_winner', compact('cities'));
-	    }elseif($request->isMethod('post')){
-
-		    $request->validate([
-			    'date' => 'required|date',
-			    'city' => 'required|exists:cities,id',
-		    ]);
-
-		    $date = new Carbon($request->date);
-
-		    $phone = Phone::whereHas('suscriptions', function($query) use ($request){
-		    	$query->where('cities.id', $request->city);
-		    })->where('status', '1')->whereHas('citiables', function($query) use ($date){
-		    	$query->whereDate('citiables.created_at', '>=', $date->toDateString());
-		    })->inRandomOrder()->first();
-
-		    if(!$phone){
-		    	$phone = "";
-		    	return "No encontramos ganador";
-		    }
-		    return "El ganador es " . $phone->name . " con tel&eacute;fono " . $phone->phone;
-
-
-
-	    }else{
-    		abort(400);
-	    }
-
-    }
-
 	public static function token_generator($number){
 		$token = openssl_random_pseudo_bytes($number);
 		$token = bin2hex($token);
