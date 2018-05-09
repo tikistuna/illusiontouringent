@@ -22,12 +22,12 @@
 	                    </div>
                     </div>
 	                <div class="input-group col-4" >
-		                <input id="search-query" type="text" class="form-control" placeholder="Search for an event...">
+		                <input id="search-query" type="text" class="form-control" placeholder="Search for an event..." v-model="query">
 		                <span class="input-group-btn">
-                            <button id="search-submit" class="btn btn-dark" type="button">Search</button>
+                            <button id="search-submit" class="btn btn-dark" type="button" @click="queryEvents(query)">Search</button>
                         </span>
 	                </div>
-	                <div class="col-3 ml-auto">Showing {{firstRecord}} to {{lastRecord}} of {{events.length}} events</div>
+	                <div class="col-3 ml-auto">Showing {{firstRecord}} to {{lastRecord}} of {{eventsQueried.length}} events</div>
                 </div>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -135,6 +135,7 @@
 
             axios.get('/api/admin/events').then(response => {
                 this.events = response.data;
+                this.eventsQueried = response.data;
             }, response => {
                 swal('Oh no!', "An error occurred with the API", "error");
             });
@@ -152,11 +153,13 @@
         data(){
             return{
                 events: [],
+	            eventsQueried: [],
                 sort: 'name-asc',
 	            showing: 10,
 	            page: 1,
                 token: '',
-	            lastCreated: ''
+	            lastCreated: '',
+	            query: ''
             }
         },
 
@@ -203,23 +206,23 @@
 
 	        eventsShowing: function(){
                 let beginning = this.showing * (this.page - 1);
-                if(beginning > this.events.length){
+                if(beginning > this.eventsQueried.length){
                     this.pageOutOfRange();
-                    return this.events.slice(this.showing* (this.lastPage - 1), this.showing* (this.lastPage - 1) + this.showing);
+                    return this.eventsQueried.slice(this.showing* (this.lastPage - 1), this.showing* (this.lastPage - 1) + this.showing);
                 }
-                return this.events.slice(beginning, beginning + this.showing);
+                return this.eventsQueried.slice(beginning, beginning + this.showing);
 	        },
             lastPage: function(){
-                return Math.ceil(this.events.length / this.showing);
+                return Math.ceil(this.eventsQueried.length / this.showing);
             },
             lastRecord: function(){
-                return Math.min(this.firstRecord + this.showing - 1, this.events.length);
+                return Math.min(this.firstRecord + this.showing - 1, this.eventsQueried.length);
             }
         },
 
         methods: {
             sortEvents: function(property){
-                this.events.sort(this.dynamicSort(property));
+                this.eventsQueried.sort(this.dynamicSort(property));
             },
 
 	        pageOutOfRange: function(){
@@ -228,7 +231,8 @@
             deleteEvent: function(lj_event){
                 let self = this;
                 let index = this.events.indexOf(lj_event);
-                if(index === -1){
+                let indexQ = this.eventsQueried.indexOf(lj_event);
+                if(index === -1 || indexQ === -1){
                     swal("Error", "Couldn't find index of this Event", "error");
                 }else{
                     swal({
@@ -245,13 +249,38 @@
                             }).then((response) => {
                                 swal("Success", "Venue was deleted", "success");
                                 self.events.splice(index, 1);
+                                self.eventsQueried.splice(indexQ, 1);
                             }).catch((response) => {
                                 swal("Oh no!", "Looks like something went wrong.", "error");
                             });
                         }
                     });
                 }
-            }
+            },
+
+	        queryEvents: function(query){
+                if(!query){
+                    this.eventsQueried = this.events;
+                    return;
+                }
+                let eventsFiltered;
+
+                eventsFiltered = this.events.filter(event => {
+                    let bool;
+                    bool = event.name.search(new RegExp(query, "i")) !== -1;
+                    bool = bool || event.cityName.search(new RegExp(query, "i")) !== -1;
+                    bool = bool || event.venueName.search(new RegExp(query, "i")) !== -1;
+                    return bool;
+                });
+                console.log(eventsFiltered);
+                this.eventsQueried = eventsFiltered;
+	        },
+
+	        say: function(query){
+                this.events.forEach((showName) => {
+                   console.log(showName.name + ': ' + showName.name.search(new RegExp(query, "i")));
+                });
+	        }
         }
 
     }
