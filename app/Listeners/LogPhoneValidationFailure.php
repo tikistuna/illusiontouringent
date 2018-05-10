@@ -27,7 +27,7 @@ class LogPhoneValidationFailure
      */
     public function handle(PhoneValidationFailed $event)
     {
-	    $input['text_record_id'] = $event->body->request_id;
+	    $input['text_record_id'] = $event->body->request_id ?? 'null';
 	    $input['code'] = $event->body->status;
 	    $input['status'] = $event->body->status_message;
 	    $input['cost'] = $event->body->request_price;
