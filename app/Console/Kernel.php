@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('subscriber:collect')->dailyAt('03:40')->timezone('America/Chicago');
 		$schedule->command('urlclicks:refresh')->dailyAt('03:50')->timezone('America/Chicago');
-	    $schedule->command('texts:send')->hourly()->timezone('America/Chicago')->between('16:00', '20:00');
+	    $schedule->command('texts:send')->dailyAt('18:00')->timezone('America/Chicago');
 	    $schedule->command('monitor:check-uptime')->everyMinute();
 	    $schedule->command('monitor:check-certificate')->daily();
     }
