@@ -154,7 +154,7 @@
             return{
                 events: [],
 	            eventsQueried: [],
-                sort: 'name-asc',
+                sort: 'date-desc',
 	            showing: 10,
 	            page: 1,
                 token: '',
