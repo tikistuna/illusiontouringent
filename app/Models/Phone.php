@@ -25,10 +25,6 @@ class Phone extends Model
 		return $this->morphToMany('App\Models\City', 'citiable')->withTimestamps();
     }
 
-	public function citiables(){
-		return $this->hasMany('App\Models\Citiable', 'citiable_id')->where('citiable_type', 'App\Models\Phone');
-	}
-
     public static function getDigits($phone){
     	$digits =  preg_replace('/[^0-9]/', '', $phone);
     	if(((int)substr($digits, 0, 1)) === 1){
@@ -42,9 +38,5 @@ class Phone extends Model
 		$phone = substr($this->phone, 3);
 		$phone = substr($phone, 0, 3) . "-" . substr($phone, 3);
 		return "({$prefix}){$phone}";
-	}
-
-	public function textErrors(){
-    	return $this->hasManyThrough('App\Models\TextError', 'App\Models\TextRecord');
 	}
 }

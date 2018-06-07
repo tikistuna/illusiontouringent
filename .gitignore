@@ -16,3 +16,7 @@ yarn-error.log
 /storage/app/public/assets
 /storage/geoip
 /config/geoip
+/public/js/admin_*
+/public/js/app.js
+/public/css/app.css
+/public/mix-manifest.json

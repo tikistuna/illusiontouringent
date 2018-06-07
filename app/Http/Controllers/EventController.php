@@ -65,22 +65,12 @@ class EventController extends Controller
 	        'date' => 'required|date',
 	        'description' => 'required|string',
 	        'reminder_description' => 'required|string',
-	        'hour' => 'required|numeric',
-	        'minute' => 'required|numeric',
 	        'prices' => 'required|string',
         ]);
 
-        $hour = $request->hour + 12;
-        if($request->minute == 0){
-	        $date = $request->date . " {$hour}:{$request->minute}0:00";
-        }else{
-	        $date = $request->date . " {$hour}:{$request->minute}:00";
-        }
-
-
         $event = Event::create([
         	'name' => $request->name,
-	        'date' => $date,
+	        'date' => $request->date,
 	        'description' => $request->description,
 	        'reminder_description' => $request->reminder_description,
 	        'city_id' => $request->city_id,
@@ -215,7 +205,7 @@ class EventController extends Controller
 	 */
 	public function api_index(){
 
-		return Event::with('city')->orderBy('name')->get()->toJson();
+		return Event::with('city')->orderBy('date', 'desc')->get()->toJson();
 
 
 	}

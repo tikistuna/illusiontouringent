@@ -4,10 +4,8 @@ namespace App\Listeners;
 
 use App\Events\TextMessageFailed;
 use App\Models\Phone;
-use App\Models\TextError;
 use App\Models\TextRecord;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+
 
 class LogTextMessageFailure
 {
