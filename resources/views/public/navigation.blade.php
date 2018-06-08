@@ -8,8 +8,8 @@
 ?>
 <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
     <div class="container">
-        <img class="img-fluid" src="/assets/logos/logo.png" width="92" height="66">
-        <a href="{{route('public.index')}}" class="navbar-brand">Illusion Touring Entertainment</a>
+        <img class="img-fluid navbar-img" src="/assets/logos/logo.png" width="150">
+        <a href="{{route('public.index')}}" class="navbar-brand navbar-brand-link">Illusion Touring Entertainment</a>
         <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>

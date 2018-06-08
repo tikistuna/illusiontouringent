@@ -36,8 +36,8 @@
                     <div class="row mt-1">
                         <div class="col text-center text-white">
                             <div class="py-2">
-                                <img class="img-fluid" src="/assets/logos/logo.png" width="102" height="73">
-                                <a class="h5" href="{{route('public.index')}}" style="position: relative; top:0.3em;">Illusion Touring Entertainment</a>
+                                <img class="img-fluid footer-link" src="/assets/logos/logo.png" width="150">
+                                <a class="h5 footer-link text-white" href="{{route('public.index')}}" >Illusion Touring Entertainment</a>
                             </div>
                         </div>
                     </div>

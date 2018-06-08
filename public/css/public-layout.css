@@ -1,7 +1,7 @@
 
 .navbar {
     opacity: 0.8;
-    border-bottom: #ffde00 3px solid;
+    border-bottom: #007bff 3px solid;
     padding-top: 0em !important; }
 
 .navbar a.dropdown-item:hover{
@@ -9,7 +9,7 @@
 }
 
 .dark-overlay {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .background-img{
@@ -58,7 +58,7 @@
 }
 
 #main-footer{
-    border-top: #ffde00 3px solid;
+    border-top: #007bff 3px solid;
 }
 
 #main-title{
@@ -71,6 +71,18 @@
     #main-title{
         text-shadow: 1px 1px 0px #050505 , 2px 2px 0px #222, 3px 3px 0px #444, 4px 4px 0px rgba(220, 220, 220, 0.4);
     }
+    .footer-img, .navbar-img{
+            width: 90px;
+        }
+        .navbar-brand-link, .footer-link{
+            font-size: 0.8rem;
+        }
+        .navbar-toggler{
+            font-size: 1rem!important;
+        }
+        .navbar-nav *{
+            font-size: 0.85rem!important;
+        }
 }
 
 
