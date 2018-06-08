@@ -24,11 +24,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('subscriber:collect')->dailyAt('03:40')->timezone('America/Chicago');
-		$schedule->command('urlclicks:refresh')->dailyAt('03:50')->timezone('America/Chicago');
-	    $schedule->command('texts:send')->dailyAt('18:00')->timezone('America/Chicago');
-	    $schedule->command('monitor:check-uptime')->everyMinute();
-	    $schedule->command('monitor:check-certificate')->daily();
     }
 
     /**
