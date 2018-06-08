@@ -172,6 +172,7 @@ class EventController extends Controller
 	 *
 	 * @param \Illuminate\Http\Request $request
 	 * @param  int $id
+	 * @param UrlShortener $urlShortener
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function eventTicketSeller(Request $request, $id, UrlShortener $urlShortener){
@@ -187,26 +188,22 @@ class EventController extends Controller
 	    }elseif($request->isMethod('post')){
 		    $request->validate([
 			    'ticket_seller_id' => 'required|numeric|exists:ticket_sellers,id',
-			    'website' => 'nullable|string',
+			    'website' => 'nullable|url',
 		    ]);
 			$event = Event::findOrFail($id);
-			if(!is_null($request->website)){
-				$event->ticket_sellers()->attach($request->ticket_seller_id, ['website' => $request->website]);
-			}else{
-				$event->ticket_sellers()->attach($request->ticket_seller_id);
-			}
+
+			$website = !is_null($request->website) ? $urlShortener->shortenUrlWithOauth($request->website) : null;
+
+			$event->ticket_sellers()->attach($request->ticket_seller_id, ['website' => $website]);
+
 
 			return redirect('/admin/events');
 
-	    }else{
-		    abort(400);
 	    }
     }
 
 	/**
-	 * @param UrlShortener $urlShortener
 	 * @return string
-	 * Need to change to a more scalable solution to loading of events with urlClicks
 	 */
 	public function api_index(){
 
