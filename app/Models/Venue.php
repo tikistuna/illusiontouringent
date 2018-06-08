@@ -31,7 +31,7 @@ class Venue extends Model
 	public function google_maps(){
     	$venue = str_replace(' ', '+', $this->name);
     	$city = str_replace(' ', '+', $this->city->name);
-    	return $this->base_url . "key=" . env('GOOGLE_MAPS_API_KEY', 'default') . "&q=" . $venue . "," . $city . "+" . $this->city->state . "&attribution_source=https://ljconciertos.com&attribution_ios_deep_link_id=comgooglemaps://?daddr=" . $venue . ", +" . $city . "+" . $this->city->state;
+    	return $this->base_url . "key=" . env('GOOGLE_MAPS_API_KEY', 'default') . "&q=" . $venue . "," . $city . "+" . $this->city->state . "&attribution_source=https://illusiontouringentertainment.com&attribution_ios_deep_link_id=comgooglemaps://?daddr=" . $venue . ", +" . $city . "+" . $this->city->state;
     }
 
     public function getCityNameAttribute(){

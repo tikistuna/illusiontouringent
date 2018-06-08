@@ -22,7 +22,7 @@ return [
          * The location from where you are running this Laravel application. This location will be
          * mentioned in all notifications that will be sent.
          */
-        'location' => 'L.J. Productions',
+        'location' => 'Illusion Touring Entertainment',
 
         /*
          * To keep reminding you that a site is down, notifications
@@ -31,7 +31,7 @@ return [
         'resend_uptime_check_failed_notification_every_minutes' => 30,
 
         'mail' => [
-            'to' => ['tikis@ljconciertos.com'],
+            'to' => ['tikis@illusiontouringentertainment.com'],
         ],
 
         'slack' => [
