@@ -174,8 +174,12 @@ class EventController extends Controller
 	 * @param  int $id
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function eventTicketSeller(Request $request, $id){
+	public function eventTicketSeller(Request $request, $id, UrlShortener $urlShortener){
 	    if($request->isMethod('get')){
+	    	if($urlShortener->isAccessTokenExpired()){
+	    		session(['url' => 'admin/eventTicketSeller/'. $id]);
+	    		return redirect('admin/oauth');
+		    }
 			$event = Event::findOrFail($id);
 	    	$ticket_sellers = TicketSeller::orderBy('name', 'asc')->pluck('name', 'id')->all();
 	    	return view('admin.events.ticket_seller_create', compact('ticket_sellers', 'event'));
