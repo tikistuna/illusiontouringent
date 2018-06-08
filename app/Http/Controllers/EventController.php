@@ -239,10 +239,7 @@ class EventController extends Controller
 			$city_id = $event->city_id;
 			$subscribers = SuscriberController::phoneSubscribersInCity($city_id);
 
-			try{
-				$message = $this->getReminderDescriptionMessageAsArray($event);
-			}catch(TextMessageException $e){
-				report($e);
+			if(empty($event->text_message)){
 				$event->six_week_reminder_sent = 2;
 				$event->save();
 				return;
@@ -253,7 +250,7 @@ class EventController extends Controller
 
             foreach($subscribers as $subscriber){
                 try{
-                    $textMessager->text($subscriber, $message);
+                    $textMessager->text($subscriber, $event->text_message);
                 }catch(TextMessageException $e){
                     $event->six_week_reminder_sent = 2;
                     $event->save();
@@ -273,10 +270,7 @@ class EventController extends Controller
 		    $city_id = $event->city_id;
 		    $subscribers = SuscriberController::phoneSubscribersInCity($city_id);
 
-		    try{
-			    $message = $this->getReminderDescriptionMessageAsArray($event);
-		    }catch(TextMessageException $e){
-			    report($e);
+		    if(empty($event->text_message)){
 			    $event->two_week_reminder_sent = 2;
 			    $event->save();
 			    return;
@@ -286,7 +280,7 @@ class EventController extends Controller
             $event->save();
             foreach($subscribers as $subscriber){
                 try{
-                    $textMessager->text($subscriber, $message);
+                    $textMessager->text($subscriber, $event->text_message);
                 }catch(TextMessageException $e){
                     $event->six_week_reminder_sent = 2;
                     $event->save();
@@ -297,37 +291,6 @@ class EventController extends Controller
             }
 
 	    }
-
-    }
-
-	/**
-	 * @param Event $event_model
-	 * @return array
-	 * @throws TextMessageException
-	 */
-	protected function getReminderDescriptionMessageAsArray(Event $event_model){
-		$matches = [];
-		if(preg_match('/<event>(.+)<event>/', $event_model->reminder_description, $matches) !== 1){
-			throw new TextMessageException('Error during preg_match -- Automated Message for event: ' . $event_model->id);
-		}
-		$event = $matches[1];
-
-		if(preg_match('/<venue>(.+)<venue>/', $event_model->reminder_description, $matches) !== 1){
-			throw new TextMessageException('Error during preg_match -- Automated Message for event: ' . $event_model->id);
-		}
-		$venue = $matches[1];
-
-		if(preg_match('/<date>(.+)<date>/', $event_model->reminder_description, $matches) !== 1){
-			throw new TextMessageException('Error during preg_match -- Automated Message for event: ' . $event_model->id);
-		}
-		$date = $matches[1];
-
-		if(preg_match('/<description>(.+)<description>/', $event_model->reminder_description, $matches) !== 1){
-			throw new TextMessageException('Error during preg_match -- Automated Message for event: ' . $event_model->id);
-		}
-		$description = $matches[1];
-
-		return compact('event', 'venue', 'date', 'description');
 
     }
 }
