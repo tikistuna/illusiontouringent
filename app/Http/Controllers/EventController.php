@@ -67,8 +67,10 @@ class EventController extends Controller
 	        'description' => 'required|string',
 	        'reminder_description' => 'required|string',
 	        'prices' => 'required|string',
+	        'illusion' => 'nullable|boolean',
         ]);
 
+        $illusion = $request->illusion ?? 0;
         $event = Event::create([
         	'name' => $request->name,
 	        'date' => $request->date,
@@ -76,6 +78,7 @@ class EventController extends Controller
 	        'reminder_description' => $request->reminder_description,
 	        'city_id' => $request->city_id,
 	        'venue_id' => $request->venue_id,
+	        'illusion' => $illusion
         ]);
 
         $prices = explode(' ', $request->prices);
@@ -105,10 +108,9 @@ class EventController extends Controller
 		    ->pluck('name', 'id')
 		    ->all();
     	$event = Event::findOrFail($id);
-    	$date = $event->date->getTimestamp();
-    	$hour = date('g', $date);
-    	$minute = date('i', $date);
-        return view('admin.events.edit', compact('event', 'cities', 'venues', 'date', 'hour', 'minute'));
+    	$date = $event->date->toDateTimeString();
+
+        return view('admin.events.edit', compact('event', 'cities', 'venues', 'date'));
     }
 
     /**
@@ -128,27 +130,21 @@ class EventController extends Controller
 		    'date' => 'required|date',
 		    'description' => 'required|string',
 		    'reminder_description' => 'required|string',
-		    'hour' => 'required|numeric',
-		    'minute' => 'required|numeric',
+		    'illusion' => 'nullable|boolean',
 	    ]);
 
         $event = Event::findOrFail($id);
 
-	    $hour = $request->hour + 12;
-	    if($request->minute == 0){
-		    $date = $request->date . " {$hour}:{$request->minute}0:00";
-	    }else{
-		    $date = $request->date . " {$hour}:{$request->minute}:00";
-	    }
-
+        $illusion = $request->illusion ?? 0;
 
 	    $event->update([
 		    'name' => $request->name,
-		    'date' => $date,
+		    'date' => $request->date,
 		    'description' => $request->description,
 		    'city_id' => $request->city_id,
 		    'venue_id' => $request->venue_id,
 		    'reminder_description' => $request->reminder_description,
+		    'illusion' => $illusion,
 	    ]);
 
 	    return redirect('/admin/events');

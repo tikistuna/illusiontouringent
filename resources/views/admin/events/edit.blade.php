@@ -85,15 +85,7 @@
                 </div>
                 <div class="form-group">
                     {!! Form::label('date', 'Date:', ['class' => 'font-weight-bold']) !!}
-                    {!! Form::date('date', \Carbon\Carbon::createFromTimestamp($date, 'America/Chicago'), ['class' => 'form-control']) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('hour', 'Hour:', ['class' => 'font-weight-bold']) !!}
-                    {!! Form::select('hour', array(''=>'Select an hour', 6 => '6:00PM' ,7 => '7:00PM', 8 => '8:00PM', 9 => '9:00PM' ), $hour,['class'=>'form-control']) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('minute', 'Minute:', ['class' => 'font-weight-bold']) !!}
-                    {!! Form::select('minute', array(''=>'Select minute', 0 => '00', 15 => '15', 30 => '30', 45 => '45'), $minute,['class'=>'form-control']) !!}
+                    {!! Form::date('date', $date, ['class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
                     {!! Form::label('description', 'Description:', ['class' => 'font-weight-bold']) !!}
