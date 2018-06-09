@@ -1,4 +1,4 @@
-https://www.youtube.com/embed/T30ddyWa38M@extends('layouts.public')
+@extends('layouts.public')
 
 @section('head')
     <link rel="stylesheet" href="/css/public-index.css">
