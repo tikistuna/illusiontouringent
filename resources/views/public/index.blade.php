@@ -27,7 +27,7 @@
 @section('main')
     <div id="featuring-video">
         <div class="iframe-wrapper">
-            <iframe src="https://www.youtube.com/embed/ObmfAHtwf6Y?rel=0&amp;showinfo=0" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/T30ddyWa38M?rel=0&amp;showinfo=0" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
         </div>
     </div>
     <div id="suscribe-top">
