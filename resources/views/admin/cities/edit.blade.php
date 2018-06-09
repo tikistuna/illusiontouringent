@@ -79,7 +79,7 @@
                     {!! Form::text('state', null, ['class'=>'form-control']) !!}
                 </div>
                 <div class="form-group mt-5">
-                    <a href="{{route('cities.index')}}" class="btn btn-link text-light">Cancel</a>
+                    <a href="{{URL::previous()}}" class="btn btn-link text-light">Cancel</a>
                     {!! Form::submit('Submit', ['class'=>'btn btn-primary']) !!}
                 </div>
                 {!! Form::close() !!}

@@ -128,7 +128,7 @@
         data(){
             return{
                 venues: [],
-                sort: 'name-asc',
+                sort: 'name',
                 showing: 10,
                 page: 1,
                 token: ''
@@ -137,27 +137,27 @@
 
         computed: {
             idAsc: function(){
-                return (this.sort === 'id-asc');
+                return (this.sort === 'id');
             },
 
             idDesc: function(){
-                return (this.sort === 'id-desc');
+                return (this.sort === '-id');
             },
 
             nameAsc: function(){
-                return (this.sort === 'name-asc');
+                return (this.sort === 'name');
             },
 
             nameDesc: function(){
-                return (this.sort === 'name-desc');
+                return (this.sort === '-name');
             },
 
             cityNameAsc: function(){
-                return (this.sort === 'cityName-asc');
+                return (this.sort === 'cityName');
             },
 
             cityNameDesc: function(){
-                return (this.sort === 'cityName-desc');
+                return (this.sort === '-cityName');
             },
 
             venuesShowing: function(){

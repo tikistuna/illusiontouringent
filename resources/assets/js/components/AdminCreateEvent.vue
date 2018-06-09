@@ -25,7 +25,7 @@
 		</div>
 		<div class="form-group">
 			<label for="date" class="font-weight-bold">Date:</label>
-			<input class="form-control" name="date" type="date" :value="date" id="date">
+			<input class="form-control" name="date" type="text" v-model="date" id="date">
 		</div>
 		<div class="form-group">
 			<label for="prices" class="font-weight-bold">Prices:</label>
@@ -37,7 +37,12 @@
 		</div>
 		<div class="form-group">
 			<label for="reminder_description" class="font-weight-bold">Description for Reminder:</label>
-			<textarea class="form-control" rows="3" name="reminder_description" cols="50" id="reminder_description"></textarea>
+			<textarea class="form-control" rows="3" name="reminder_description" cols="50" id="reminder_description" v-model="description"></textarea>
+			<span :class="{'text-danger': maxCharsExceeded}" class="float-right pt-2" id="charsLeft">{{charactersLeft}}</span>
+		</div>
+		<div class="form-group">
+			<input type="checkbox" value="1" name="illusion" id="illusion">
+			<label for="illusion">Illusion Touring Entertainment?</label>
 		</div>
 		<div class="form-group">
 			<a :href="appUrl + '/admin/events'" class="btn btn-link text-light">Cancel</a>
@@ -79,7 +84,8 @@
 		        cities: [],
 		        venues: [],
 		        selectedCity: '',
-		        selectedVenue: ''
+		        selectedVenue: '',
+		        description: ''
 	        }
 		},
 
@@ -94,11 +100,22 @@
 	                    return venue.city_id === this.selectedCity;
 	                });
 	            }
-	        }
+	        },
+
+			charactersLeft: function(){
+	            let length = this.description.length;
+	            return length + ' / 160 ';
+			},
+
+			maxCharsExceeded: function(){
+	            return this.description.length > 160;
+			}
 		}
 	}
 </script>
 
 <style scoped>
-
+	#charsLeft{
+		font-size: 0.7rem;
+	}
 </style>

@@ -30,7 +30,7 @@
                     </div>
                     <div class="form-group">
                         <a href="{{route('events.index')}}" class="btn btn-link text-light">Cancel</a>
-                        {!! Form::submit('Create Event', ['class'=>'btn btn-primary']) !!}
+                        {!! Form::submit('Link Seller', ['class'=>'btn btn-primary']) !!}
                     </div>
                     {!! Form::close() !!}
                 </div>

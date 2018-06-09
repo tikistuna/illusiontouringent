@@ -143,7 +143,7 @@
         data(){
             return{
                 cities: [],
-                sort: 'name-asc',
+                sort: 'name',
                 showing: 10,
                 page: 1,
                 token: ''
@@ -152,35 +152,35 @@
 
         computed: {
             idAsc: function(){
-                return (this.sort === 'id-asc');
+                return (this.sort === 'id');
             },
 
             idDesc: function(){
-                return (this.sort === 'id-desc');
+                return (this.sort === '-id');
             },
 
             nameAsc: function(){
-                return (this.sort === 'name-asc');
+                return (this.sort === 'name');
             },
 
             nameDesc: function(){
-                return (this.sort === 'name-desc');
+                return (this.sort === '-name');
             },
 
             eventsLeftAsc: function(){
-                return (this.sort === 'eventsLeft-asc');
+                return (this.sort === 'eventsLeft');
             },
 
             eventsLeftDesc: function(){
-                return (this.sort === 'eventsLeft-desc');
+                return (this.sort === '-eventsLeft');
             },
 
             eventsPastAsc: function(){
-                return (this.sort === 'eventsPast-asc');
+                return (this.sort === 'eventsPast');
             },
 
             eventsPastDesc: function(){
-                return (this.sort === 'eventsPast-desc');
+                return (this.sort === '-eventsPast');
             },
 
             citiesShowing: function(){
