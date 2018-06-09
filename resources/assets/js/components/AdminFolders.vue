@@ -130,7 +130,7 @@
         data(){
             return{
                 folders: [],
-                sort: 'name-asc',
+                sort: 'name',
                 showing: 10,
                 page: 1,
                 token: ''

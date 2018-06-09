@@ -41,7 +41,7 @@ class TicketSellerController extends Controller
 		    'phone' => 'nullable|string',
 		    'address' => 'required_without:website|nullable|string',
 		    'hours' => 'nullable|string',
-		    'website' => 'required_without_all:phone,address|nullable|string',
+		    'website' => 'required_without_all:phone,address|nullable|url',
 	    ]);
 
 	    TicketSeller::create($request->all());

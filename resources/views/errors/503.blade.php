@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie-edge">
-    <title>L.J. Productions</title>
+    <title>Illusion Touring Entertainment</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/public-layout.css">
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
@@ -36,7 +36,7 @@
                 <div class="col text-center text-white">
                     <div class="py-2">
                         <img class="img-fluid" src="/assets/logos/logo.png" width="102" height="73">
-                        <a class="h5" href="{{route('public.index')}}" style="position: relative; top:0.3em;">L.J. Productions</a>
+                        <a class="h5" href="{{route('public.index')}}" style="position: relative; top:0.3em;">Illusion Touring Entertainment</a>
                     </div>
                 </div>
             </div>

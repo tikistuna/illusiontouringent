@@ -5,7 +5,7 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
     <div class="container">
         <img class="img-fluid" src="/assets/logos/logo.png" width="102" height="73">
-        <a href="{{route('events.index')}}" class="navbar-brand">L.J. Productions</a>
+        <a href="{{route('events.index')}}" class="navbar-brand">Illusion Touring Entertainment</a>
         <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>

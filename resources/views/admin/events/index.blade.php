@@ -1,4 +1,7 @@
 @extends('admin.layouts.admin')
+@section('head')
+    <meta name="sort" content="{{ $sort }}">
+@stop
 @section('scripts')
     <script src="/js/admin_events.js"></script>
 @stop

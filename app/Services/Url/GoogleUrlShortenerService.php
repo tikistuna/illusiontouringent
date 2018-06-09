@@ -58,12 +58,12 @@ class GoogleUrlShortenerService implements UrlShortener{
 			$token = $this->client->fetchAccessTokenWithAuthCode($request->query('code'));
 			$this->client->setAccessToken($token);
 			Cache::forever('upload_token', $token);
-			return redirect('/admin/events/create');
+			return redirect(session('url', 'admin/events'));
 		}
 
 		if (!$this->client->isAccessTokenExpired()) {
 			$this->client->setAccessToken(Cache::get('upload_token'));
-			return redirect('/admin/events/create');
+			return redirect(session('url', 'admin/events'));
 		} else {
 			return redirect()->away($this->client->createAuthUrl());
 		}

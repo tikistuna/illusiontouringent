@@ -76,7 +76,7 @@ class SuscriberController extends Controller
 				 */
 				try{
 					Mail::send('emails.verification', $email_data, function($m) use ($email){
-						$m->from('verification@ljconciertos.com', 'L.J. Productions');
+						$m->from('verification@illusiontouringentertainment.com', 'Illusion Touring Entertainment');
 						$name = $email->name ? $email->name : 'Estimado Suscriptor';
 						$m->to($email->email, $name)->subject('Verificación de e-mail');
 					});
@@ -104,7 +104,7 @@ class SuscriberController extends Controller
 
 				try{
 					Mail::send('emails.verified', $email_data, function($m) use ($email){
-						$m->from('verification@ljconciertos.com', 'L.J. Productions');
+						$m->from('verification@illusiontouringentertainment.com', 'Illusion Touring Entertainment');
 						$name = $email->name ? $email->name : 'Estimado Suscriptor';
 						$m->to($email->email, $name)->subject('Verificación de e-mail');
 					});

@@ -26,9 +26,10 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-		return view('admin.events.index');
+    	$sort = $request->query('sort') ?? '-date';
+		return view('admin.events.index', compact('sort'));
     }
 
     /**
@@ -66,8 +67,10 @@ class EventController extends Controller
 	        'description' => 'required|string',
 	        'reminder_description' => 'required|string',
 	        'prices' => 'required|string',
+	        'illusion' => 'nullable|boolean',
         ]);
 
+        $illusion = $request->illusion ?? 0;
         $event = Event::create([
         	'name' => $request->name,
 	        'date' => $request->date,
@@ -75,6 +78,7 @@ class EventController extends Controller
 	        'reminder_description' => $request->reminder_description,
 	        'city_id' => $request->city_id,
 	        'venue_id' => $request->venue_id,
+	        'illusion' => $illusion
         ]);
 
         $prices = explode(' ', $request->prices);
@@ -104,10 +108,9 @@ class EventController extends Controller
 		    ->pluck('name', 'id')
 		    ->all();
     	$event = Event::findOrFail($id);
-    	$date = $event->date->getTimestamp();
-    	$hour = date('g', $date);
-    	$minute = date('i', $date);
-        return view('admin.events.edit', compact('event', 'cities', 'venues', 'date', 'hour', 'minute'));
+    	$date = $event->date->toDateTimeString();
+
+        return view('admin.events.edit', compact('event', 'cities', 'venues', 'date'));
     }
 
     /**
@@ -127,27 +130,21 @@ class EventController extends Controller
 		    'date' => 'required|date',
 		    'description' => 'required|string',
 		    'reminder_description' => 'required|string',
-		    'hour' => 'required|numeric',
-		    'minute' => 'required|numeric',
+		    'illusion' => 'nullable|boolean',
 	    ]);
 
         $event = Event::findOrFail($id);
 
-	    $hour = $request->hour + 12;
-	    if($request->minute == 0){
-		    $date = $request->date . " {$hour}:{$request->minute}0:00";
-	    }else{
-		    $date = $request->date . " {$hour}:{$request->minute}:00";
-	    }
-
+        $illusion = $request->illusion ?? 0;
 
 	    $event->update([
 		    'name' => $request->name,
-		    'date' => $date,
+		    'date' => $request->date,
 		    'description' => $request->description,
 		    'city_id' => $request->city_id,
 		    'venue_id' => $request->venue_id,
 		    'reminder_description' => $request->reminder_description,
+		    'illusion' => $illusion,
 	    ]);
 
 	    return redirect('/admin/events');
@@ -171,10 +168,15 @@ class EventController extends Controller
 	 *
 	 * @param \Illuminate\Http\Request $request
 	 * @param  int $id
+	 * @param UrlShortener $urlShortener
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-	public function eventTicketSeller(Request $request, $id){
+	public function eventTicketSeller(Request $request, $id, UrlShortener $urlShortener){
 	    if($request->isMethod('get')){
+	    	if($urlShortener->isAccessTokenExpired()){
+	    		session(['url' => 'admin/eventTicketSeller/'. $id]);
+	    		return redirect('admin/oauth');
+		    }
 			$event = Event::findOrFail($id);
 	    	$ticket_sellers = TicketSeller::orderBy('name', 'asc')->pluck('name', 'id')->all();
 	    	return view('admin.events.ticket_seller_create', compact('ticket_sellers', 'event'));
@@ -182,26 +184,22 @@ class EventController extends Controller
 	    }elseif($request->isMethod('post')){
 		    $request->validate([
 			    'ticket_seller_id' => 'required|numeric|exists:ticket_sellers,id',
-			    'website' => 'nullable|string',
+			    'website' => 'nullable|url',
 		    ]);
 			$event = Event::findOrFail($id);
-			if(!is_null($request->website)){
-				$event->ticket_sellers()->attach($request->ticket_seller_id, ['website' => $request->website]);
-			}else{
-				$event->ticket_sellers()->attach($request->ticket_seller_id);
-			}
+
+			$website = !is_null($request->website) ? $urlShortener->shortenUrlWithOauth($request->website) : null;
+
+			$event->ticket_sellers()->attach($request->ticket_seller_id, ['website' => $website]);
+
 
 			return redirect('/admin/events');
 
-	    }else{
-		    abort(400);
 	    }
     }
 
 	/**
-	 * @param UrlShortener $urlShortener
 	 * @return string
-	 * Need to change to a more scalable solution to loading of events with urlClicks
 	 */
 	public function api_index(){
 
@@ -237,10 +235,7 @@ class EventController extends Controller
 			$city_id = $event->city_id;
 			$subscribers = SuscriberController::phoneSubscribersInCity($city_id);
 
-			try{
-				$message = $this->getReminderDescriptionMessageAsArray($event);
-			}catch(TextMessageException $e){
-				report($e);
+			if(empty($event->text_message)){
 				$event->six_week_reminder_sent = 2;
 				$event->save();
 				return;
@@ -251,7 +246,7 @@ class EventController extends Controller
 
             foreach($subscribers as $subscriber){
                 try{
-                    $textMessager->text($subscriber, $message);
+                    $textMessager->text($subscriber, $event->text_message);
                 }catch(TextMessageException $e){
                     $event->six_week_reminder_sent = 2;
                     $event->save();
@@ -271,10 +266,7 @@ class EventController extends Controller
 		    $city_id = $event->city_id;
 		    $subscribers = SuscriberController::phoneSubscribersInCity($city_id);
 
-		    try{
-			    $message = $this->getReminderDescriptionMessageAsArray($event);
-		    }catch(TextMessageException $e){
-			    report($e);
+		    if(empty($event->text_message)){
 			    $event->two_week_reminder_sent = 2;
 			    $event->save();
 			    return;
@@ -284,7 +276,7 @@ class EventController extends Controller
             $event->save();
             foreach($subscribers as $subscriber){
                 try{
-                    $textMessager->text($subscriber, $message);
+                    $textMessager->text($subscriber, $event->text_message);
                 }catch(TextMessageException $e){
                     $event->six_week_reminder_sent = 2;
                     $event->save();
@@ -295,37 +287,6 @@ class EventController extends Controller
             }
 
 	    }
-
-    }
-
-	/**
-	 * @param Event $event_model
-	 * @return array
-	 * @throws TextMessageException
-	 */
-	protected function getReminderDescriptionMessageAsArray(Event $event_model){
-		$matches = [];
-		if(preg_match('/<event>(.+)<event>/', $event_model->reminder_description, $matches) !== 1){
-			throw new TextMessageException('Error during preg_match -- Automated Message for event: ' . $event_model->id);
-		}
-		$event = $matches[1];
-
-		if(preg_match('/<venue>(.+)<venue>/', $event_model->reminder_description, $matches) !== 1){
-			throw new TextMessageException('Error during preg_match -- Automated Message for event: ' . $event_model->id);
-		}
-		$venue = $matches[1];
-
-		if(preg_match('/<date>(.+)<date>/', $event_model->reminder_description, $matches) !== 1){
-			throw new TextMessageException('Error during preg_match -- Automated Message for event: ' . $event_model->id);
-		}
-		$date = $matches[1];
-
-		if(preg_match('/<description>(.+)<description>/', $event_model->reminder_description, $matches) !== 1){
-			throw new TextMessageException('Error during preg_match -- Automated Message for event: ' . $event_model->id);
-		}
-		$description = $matches[1];
-
-		return compact('event', 'venue', 'date', 'description');
 
     }
 }
