@@ -1,9 +1,9 @@
 <?php
 	$cities_prox = App\Models\City::whereHas('events', function ($query){
-		$query->whereDate('date', '>=', Carbon\Carbon::today()->toDateString());
+		$query->whereDate('date', '>=', Carbon\Carbon::today()->toDateString())->where('illusion', 1);
 	})->orderBy('name')->pluck('name');
 	$cities_past = App\Models\City::whereHas('events', function ($query){
-		$query->whereDate('date', '<=', Carbon\Carbon::today()->toDateString());
+		$query->whereDate('date', '<', Carbon\Carbon::today()->toDateString())->where('illusion', 1);
 	})->orderBy('name')->pluck('name');
 ?>
 <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">

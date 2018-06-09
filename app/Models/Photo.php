@@ -24,4 +24,8 @@ class Photo extends Model
         $pos = strrpos($this->path, '/');
         return substr($this->path, $pos+1);
     }
+
+    public function getPathAttribute($path){
+    	return 'https://ljconciertos.com' . $path;
+    }
 }
