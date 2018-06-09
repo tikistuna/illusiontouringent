@@ -12,7 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-	    'https://illusiontouringentertainment.com/nexmo/*',
-	    'https://illusiontouringentertainment.com/mailgun/*',
+	    'https://illusiontouringent.com/nexmo/*',
+	    'https://illusiontouringent.com/mailgun/*',
     ];
 }

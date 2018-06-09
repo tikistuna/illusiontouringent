@@ -12,7 +12,7 @@
             Hemos recibido exit&oacute;samente su suscripci&oacute;n para la ciudad de {{$city}}
             <br/>
             Por favor verifique su e-mail haciendo click en el siguiente enlace:
-            <a href="https://illusiontouringentertainment.com/suscribers/verification/email/{{$email}}/{{$validation_code}}">Verificar</a>
+            <a href="https://illusiontouringent.com/suscribers/verification/email/{{$email}}/{{$validation_code}}">Verificar</a>
         </p>
     </body>
 </html>
