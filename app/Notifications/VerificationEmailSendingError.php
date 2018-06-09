@@ -42,7 +42,7 @@ class VerificationEmailSendingError extends Notification
 		return (new SlackMessage)
 			->from('Tikis')
 			->to('#web')
-			->image('https://illusiontouringentertainment.com/assets/logos/logo.png')
+			->image('https://illusiontouringent.com/assets/logos/logo.png')
 			->content('Email Sending Error: ' . $this->msg);
 	}
 

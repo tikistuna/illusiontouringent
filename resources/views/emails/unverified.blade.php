@@ -10,7 +10,7 @@
         </p>
         <p>
             Para seguir participando para ganar boletos y/o meet and greet con sus artistas favoritos, por favor verifique su e-mail haciendo click en el siguiente enlace:
-            <a href="https://illusiontouringentertainment.com/suscribers/verification/email/{{$email}}/{{$validation_code}}">Verificar</a>
+            <a href="https://illusiontouringent.com/suscribers/verification/email/{{$email}}/{{$validation_code}}">Verificar</a>
         </p>
     </body>
 </html>

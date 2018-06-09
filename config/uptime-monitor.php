@@ -31,7 +31,7 @@ return [
         'resend_uptime_check_failed_notification_every_minutes' => 30,
 
         'mail' => [
-            'to' => ['tikis@illusiontouringentertainment.com'],
+            'to' => ['tikis@illusiontouringent.com'],
         ],
 
         'slack' => [
