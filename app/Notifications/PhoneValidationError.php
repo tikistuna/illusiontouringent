@@ -43,7 +43,7 @@ class PhoneValidationError extends Notification
 		return (new SlackMessage)
 			->from('Tikis')
 			->to('#web')
-			->image('https://ljconciertos.com/assets/logos/logo.png')
+			->image('https://illusiontouringentertainment.com/assets/logos/logo.png')
 			->content('Phone Validation Error: ' . $this->msg);
 	}
 

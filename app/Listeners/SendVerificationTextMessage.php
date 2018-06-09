@@ -36,11 +36,11 @@ class SendVerificationTextMessage
 	    $url =  env('APP_URL') . '/suscribers/verification/phone/' . $event->phone->phone . '/' . $event->phone->validation_code;
 	    try{
             $shortenedurl =	$this->urlShortener->shortenUrl($url);
-            $message = ['event' => 'L.J. Productions: Verifique su telefono haciendo click', 'venue' =>'siguiente enlace', 'date' => $shortenedurl, 'description' => ' .'];
+            $message = ['event' => 'Illusion Touring Entertainment: Verifique su telefono haciendo click', 'venue' =>'siguiente enlace', 'date' => $shortenedurl, 'description' => ' .'];
             $this->textMessager->text($event->phone, $message);
         }catch(UrlShorteningException $e){
 	    	report($e);
-            $message = ['event' => 'L.J. Productions:', 'venue' =>'. ', 'date' => $url, 'description' => ' .'];
+            $message = ['event' => 'Illusion Touring Entertainment:', 'venue' =>'. ', 'date' => $url, 'description' => ' .'];
             $this->textMessager->text($event->phone, $message);
         }
 

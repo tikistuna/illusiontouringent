@@ -24,7 +24,7 @@ class TicketSeller extends Model
 		}
 		$city_name = str_replace(' ', '+', $city->name);
 
-		return $this->base_url . "key=" . env('GOOGLE_MAPS_API_KEY', 'default') . "&q=" . $venue . "," . $city_name . "+" . $city->state . "&attribution_source=https://ljconciertos.com&attribution_ios_deep_link_id=comgooglemaps://?daddr=" . $address;
+		return $this->base_url . "key=" . env('GOOGLE_MAPS_API_KEY', 'default') . "&q=" . $venue . "," . $city_name . "+" . $city->state . "&attribution_source=https://illusiontouringentertainment.com&attribution_ios_deep_link_id=comgooglemaps://?daddr=" . $address;
 	}
 
 	public function events(){

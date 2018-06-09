@@ -75,7 +75,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie-edge">
-    <title>L.J. Productions--Admin</title>
+    <title>Illusion Touring Entertainment--Admin</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/public-layout.css">
     <script src="https://use.fontawesome.com/04597954ff.js"></script>
@@ -113,7 +113,7 @@
                 <div class="col-lg-5 col-md-7 col-sm-9 col-10 mx-auto">
                     <div class="card bg-light card-form">
                         <div class="card-header text-dark font-weight-bold">
-                            Log in to L.J. Productions
+                            Log in to Illusion Touring Entertainment
                         </div>
                         <div class="card-body pt-0">
                             <div class="text-center">
@@ -177,7 +177,7 @@
             <div class="col text-center text-white">
                 <div class="py-2">
                     <img class="img-fluid" src="/assets/logos/logo.png" width="102" height="73">
-                    <a class="h5" href="{{route('public.index')}}" style="position: relative; top:0.3em;">L.J. Productions</a>
+                    <a class="h5" href="{{route('public.index')}}" style="position: relative; top:0.3em;">Illusion Touring Entertainment</a>
                 </div>
             </div>
         </div>
