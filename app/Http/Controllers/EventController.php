@@ -200,7 +200,7 @@ class EventController extends Controller
 	 */
 	public function api_index(){
 
-		return Event::with('city')->orderBy('date', 'desc')->get()->toJson();
+		return Event::orderBy('date', 'desc')->get()->toJson();
 
 
 	}
@@ -241,7 +241,7 @@ class EventController extends Controller
 		$events = Event::whereDate('date', '<', $six_weeks)->whereDate('date', '>', $four_weeks)->where('six_week_reminder_sent', 0)->orderBy('date')->get();
 		if($events->count() > 0){
 			$event = $events[0];
-			$city_id = $event->city_id;
+			$city_id = $event->city->id;
 			$subscribers = SuscriberController::phoneSubscribersInCity($city_id);
 
 			if(empty($event->text_message)){
@@ -272,7 +272,7 @@ class EventController extends Controller
 	    $events = Event::whereDate('date', '<', $two_weeks)->whereDate('date', '>', $now)->where('two_week_reminder_sent', 0)->orderBy('date')->get();
 	    if($events->count() > 0){
 		    $event = $events[0];
-		    $city_id = $event->city_id;
+		    $city_id = $event->city->id;
 		    $subscribers = SuscriberController::phoneSubscribersInCity($city_id);
 
 		    if(empty($event->text_message)){

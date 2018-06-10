@@ -34,7 +34,8 @@ class PublicController extends Controller
 	    if ($city === false){
 		    $events = Event::upcoming()->orderBy('date')->offset($offset)->limit(8)->get();
 	    } else{
-		    $events = Event::where('city_id', $city)->upcoming()->orderBy('date')->offset($offset)->limit(8)->get();
+	    	$city = City::findOrFail($city);
+		    $events = $city->events()->upcoming()->orderBy('date')->offset($offset)->limit(8)->get();
 	    }
 
 		    if($events->count() > 0){
