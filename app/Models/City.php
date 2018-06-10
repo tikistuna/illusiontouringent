@@ -12,11 +12,11 @@ class City extends Model
 	protected $appends = ['eventsLeft', 'eventsPast'];
 
 	public function events(){
-		return $this->hasMany('App\Models\Event');
+		return $this->hasManyThrough('App\Models\Event', 'App\Models\Venue');
 	}
 
 	public function venues(){
-		return $this->hasManyThrough('App\Models\Venue', 'App\Models\Event');
+		return $this->hasMany('App\Models\Venue');
 	}
 
 	public function emails(){
@@ -28,16 +28,12 @@ class City extends Model
 	}
 
 	public function getEventsLeftAttribute(){
-		return $this->withCount(['events' => function($query){
-		    $query->whereDate('date', '>=', Carbon::today()->toDateString());
-        }])->find($this->id)->events_count;
+		return $this->events()->upcoming()->get()->count();
 
 	}
 
 	public function getEventsPastAttribute(){
-        return $this->withCount(['events' => function($query){
-            $query->whereDate('date', '<', Carbon::today()->toDateString());
-        }])->find($this->id)->events_count;
+        return $this->events()->past()->get()->count();
     }
 
 }

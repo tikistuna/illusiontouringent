@@ -61,7 +61,6 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        	'city_id' => 'bail|required|numeric|exists:cities,id',
         	'venue_id' => 'bail|required|numeric|exists:venues,id',
 	        'name' => 'required|string',
 	        'date' => 'required|date',
@@ -77,7 +76,6 @@ class EventController extends Controller
 	        'date' => $request->date,
 	        'description' => $request->description,
 	        'reminder_description' => $request->reminder_description,
-	        'city_id' => $request->city_id,
 	        'venue_id' => $request->venue_id,
 	        'illusion' => $illusion
         ]);
@@ -125,7 +123,6 @@ class EventController extends Controller
     {
 
 	    $request->validate([
-		    'city_id' => 'bail|required|numeric|exists:cities,id',
 		    'venue_id' => 'bail|required|numeric|exists:venues,id',
 		    'name' => 'required|string',
 		    'date' => 'required|date',
@@ -142,7 +139,6 @@ class EventController extends Controller
 		    'name' => $request->name,
 		    'date' => $request->date,
 		    'description' => $request->description,
-		    'city_id' => $request->city_id,
 		    'venue_id' => $request->venue_id,
 		    'reminder_description' => $request->reminder_description,
 		    'illusion' => $illusion,
@@ -204,7 +200,7 @@ class EventController extends Controller
 	 */
 	public function api_index(){
 
-		return Event::with('city')->orderBy('date', 'desc')->get()->toJson();
+		return Event::orderBy('date', 'desc')->get()->toJson();
 
 
 	}
@@ -245,7 +241,7 @@ class EventController extends Controller
 		$events = Event::whereDate('date', '<', $six_weeks)->whereDate('date', '>', $four_weeks)->where('six_week_reminder_sent', 0)->orderBy('date')->get();
 		if($events->count() > 0){
 			$event = $events[0];
-			$city_id = $event->city_id;
+			$city_id = $event->city->id;
 			$subscribers = SuscriberController::phoneSubscribersInCity($city_id);
 
 			if(empty($event->text_message)){
@@ -276,7 +272,7 @@ class EventController extends Controller
 	    $events = Event::whereDate('date', '<', $two_weeks)->whereDate('date', '>', $now)->where('two_week_reminder_sent', 0)->orderBy('date')->get();
 	    if($events->count() > 0){
 		    $event = $events[0];
-		    $city_id = $event->city_id;
+		    $city_id = $event->city->id;
 		    $subscribers = SuscriberController::phoneSubscribersInCity($city_id);
 
 		    if(empty($event->text_message)){
