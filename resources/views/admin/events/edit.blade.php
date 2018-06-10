@@ -76,10 +76,6 @@
                     {!! Form::text('name', null, ['class'=>'form-control']) !!}
                 </div>
                 <div class="form-group">
-                    {!! Form::label('city_id', 'City:', ['class' => 'font-weight-bold']) !!}
-                    {!! Form::select('city_id', array(''=>'Select a City')  + $cities , null,['class'=>'form-control']) !!}
-                </div>
-                <div class="form-group">
                     {!! Form::label('venue_id', 'Venue:', ['class' => 'font-weight-bold']) !!}
                     {!! Form::select('venue_id', array(''=>'Select a Venue')  + $venues , null,['class'=>'form-control']) !!}
                 </div>

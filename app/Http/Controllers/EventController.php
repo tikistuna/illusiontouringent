@@ -61,7 +61,6 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        	'city_id' => 'bail|required|numeric|exists:cities,id',
         	'venue_id' => 'bail|required|numeric|exists:venues,id',
 	        'name' => 'required|string',
 	        'date' => 'required|date',
@@ -77,7 +76,6 @@ class EventController extends Controller
 	        'date' => $request->date,
 	        'description' => $request->description,
 	        'reminder_description' => $request->reminder_description,
-	        'city_id' => $request->city_id,
 	        'venue_id' => $request->venue_id,
 	        'illusion' => $illusion
         ]);
@@ -125,7 +123,6 @@ class EventController extends Controller
     {
 
 	    $request->validate([
-		    'city_id' => 'bail|required|numeric|exists:cities,id',
 		    'venue_id' => 'bail|required|numeric|exists:venues,id',
 		    'name' => 'required|string',
 		    'date' => 'required|date',
@@ -142,7 +139,6 @@ class EventController extends Controller
 		    'name' => $request->name,
 		    'date' => $request->date,
 		    'description' => $request->description,
-		    'city_id' => $request->city_id,
 		    'venue_id' => $request->venue_id,
 		    'reminder_description' => $request->reminder_description,
 		    'illusion' => $illusion,
