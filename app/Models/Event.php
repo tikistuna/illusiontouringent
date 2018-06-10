@@ -12,7 +12,6 @@ class Event extends Model
 		'name',
 	    'date',
 	    'description',
-	    'city_id',
 	    'venue_id',
 	    'reminder_description',
 	    'illusion',
@@ -25,7 +24,7 @@ class Event extends Model
     protected $hidden = ['created_at', 'updated_at', 'city_id', 'venue_id'];
 
     public function city(){
-    	return $this->belongsTo('App\Models\City');
+    	return $this->venue->city();
     }
 
 	public function venue(){
