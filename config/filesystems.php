@@ -66,6 +66,11 @@ return [
 	    'backup' => [
 		    'driver' => 'local',
 		    'root' => storage_path('app/backups'),
+	    ],
+
+	    'snapshots' => [
+		    'driver' => 'local',
+		    'root' => storage_path('app/snapshots'),
 	    ]
 
     ],
