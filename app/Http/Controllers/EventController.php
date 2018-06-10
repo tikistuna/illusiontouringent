@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\Venue;
 use App\Notifications\TextMessageFailure;
 use App\Services\TextMessage\Exceptions\TextMessageException;
+use App\Services\Url\Exceptions\UrlGetClicksException;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -217,10 +218,16 @@ class EventController extends Controller
 	 * @param UrlShortener $urlShortener
 	 */
 	public function RefreshUrlClicks(UrlShortener $urlShortener){
-		$events = Event::all();
+		$events = Event::whereDate('date', '>=', Carbon::today()->toDateString())->get();
 		foreach($events as $event){
 			if($ticketSeller = $event->ticketSellersWithShortUrl->first()){
-				$event->urlClicks = (int)$urlShortener->getClicks($ticketSeller->pivot->website);
+				try{
+					$event->urlClicks = (int)$urlShortener->getClicks($ticketSeller->pivot->website);
+				}catch(UrlGetClicksException $e){
+				/**
+				 * Getting url stats has been unreliable due to Google's servers, no logging will be done for now
+				 */
+				}
 				$event->save();
 			}
 		}
