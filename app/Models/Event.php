@@ -96,4 +96,16 @@ class Event extends Model
     	[$event, $date, $venue, $description] = $msg;
     	return compact('event', 'date', 'venue', 'description');
 	}
+
+	/**
+	 * Scopes for Model
+	 */
+
+	public function scopeUpcoming($query){
+		return $query->whereDate('date', '>=', Carbon::today()->toDateString());
+	}
+
+	public function scopePast($query){
+		return $query->whereDate('date', '<', Carbon::today()->toDateString());
+	}
 }

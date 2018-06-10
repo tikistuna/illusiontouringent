@@ -11,32 +11,30 @@ class PublicController extends Controller
 {
     public function index(){
 
-    	$events = Event::whereDate('date', '>=', Carbon::today()->toDateString())->orderBy('date', 'asc')->offset(0)->limit(8)->get();
-	    $cities = City::orderBy('name', 'asc')
-		    ->pluck('name', 'id')
-		    ->all();
+    	$events = Event::upcoming()->orderBy('date')->offset(0)->limit(8)->get();
+	    $cities = City::orderBy('name')->pluck('name', 'id')->all();
+
     	return view('public.index', compact('events', 'cities'));
     }
 
     public function by_city($city){
-    		$city = City::where('name', '=', $city)->first();
-    		if(!$city){
+
+    		if(!$city = City::where('name', $city)->first()){
     		    abort(400);
             }
-    		$events = Event::where('city_id', '=', $city->id)->whereDate('date', '>=', Carbon::today()->toDateString())->orderBy('date', 'asc')->offset(0)->limit(8)->get();
-    		$cities = City::orderBy('name', 'asc')
-			    ->pluck('name', 'id')
-			    ->all();
+
+    		$events = $city->events()->upcoming()->orderBy('date')->offset(0)->limit(8)->get();
+    		$cities = City::orderBy('name')->pluck('name', 'id')->all();
+
 		    return view('public.index', compact('events', 'cities', 'city'));
     }
 
     public function lazy_load($offset, $city = false){
 
 	    if ($city === false){
-
-		    $events = Event::whereDate('date', '>=', Carbon::today()->toDateString())->orderBy('date', 'asc')->offset($offset)->limit(8)->get();
+		    $events = Event::upcoming()->orderBy('date')->offset($offset)->limit(8)->get();
 	    } else{
-		    $events = Event::where('city_id', '=', $city)->whereDate('date', '>=', Carbon::today()->toDateString())->orderBy('date', 'asc')->offset($offset)->limit(8)->get();
+		    $events = Event::where('city_id', $city)->upcoming()->orderBy('date')->offset($offset)->limit(8)->get();
 	    }
 
 		    if($events->count() > 0){
@@ -49,15 +47,17 @@ class PublicController extends Controller
 
     public function past($city = false){
     	if($city === false){
-    		$events = Event::whereDate('date', '<', Carbon::today()->toDateString())->orderBy('date', 'desc')->get();
+    		$events = Event::past()->orderBy('date', 'desc')->get();
     		$events = $events->groupBy('name');
     		$count = $events->count();
     		$keys = $events->keys();
 		    return view('public.past.all', compact('events', 'count', 'keys'));
 	    }else{
-		    $events = Event::whereDate('date', '<', Carbon::today()->toDateString())->whereHas('city', function($query) use($city){
-		    	$query->where('name', $city);
-		    })->orderBy('date', 'desc')->get();
+		    if(!$city = City::where('name', $city)->first()){
+			    abort(400);
+		    }
+
+		    $events = $city->events()->past()->orderBy('date', 'desc')->get();
 		    $events = $events->groupBy('name');
 		    $count = $events->count();
 		    $keys = $events->keys();

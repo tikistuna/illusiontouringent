@@ -14,7 +14,7 @@ class TicketSellerController extends Controller
      */
     public function index()
     {
-        $ticket_sellers = TicketSeller::orderBy('name', 'asc')->get();
+        $ticket_sellers = TicketSeller::orderBy('name')->get();
         return view('admin.ticket_sellers.index', compact('ticket_sellers'));
     }
 

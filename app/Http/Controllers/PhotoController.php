@@ -18,13 +18,13 @@ class PhotoController extends Controller
      */
     public function create()
     {
-	    $events = Event::doesntHave('photo')->orderBy('name', 'asc')->get();
+	    $events = Event::doesntHave('photo')->orderBy('name')->get();
 	    $events_cities = [];
 	    foreach($events as $event){
 	    	$events_cities[$event->id] = "{$event->name} en {$event->city->name}";
 	    }
 
-	    $folders = Folder::orderBy('name', 'asc')
+	    $folders = Folder::orderBy('name')
 		    ->pluck('name', 'id')
 		    ->all();
 
@@ -67,14 +67,14 @@ class PhotoController extends Controller
     {
     	$photo = Photo::findOrFail($id);
 
-	    $events = Event::orderBy('name', 'asc')
+	    $events = Event::orderBy('name')
 		    ->get();
 	    $events_cities = array();
 	    foreach($events as $event){
 		    $events_cities[$event->id] = "{$event->name} en {$event->city->name}";
 	    }
 
-	    $folders = Folder::orderBy('name', 'asc')
+	    $folders = Folder::orderBy('name')
 		    ->pluck('name', 'id')
 		    ->all();
 

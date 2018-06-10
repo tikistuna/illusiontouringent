@@ -40,10 +40,10 @@ class EventController extends Controller
      */
     public function create()
     {
-    	$cities = City::orderBy('name', 'asc')
+    	$cities = City::orderBy('name')
 	                    ->pluck('name', 'id')
 		                ->all();
-	    $venues_raw = Venue::orderBy('name', 'asc')
+	    $venues_raw = Venue::orderBy('name')
 		    ->get();
 	    $venues = array();
 	    foreach($venues_raw as $venue){
@@ -102,10 +102,10 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-	    $cities = City::orderBy('name', 'asc')
+	    $cities = City::orderBy('name')
 		    ->pluck('name', 'id')
 		    ->all();
-	    $venues = Venue::orderBy('name', 'asc')
+	    $venues = Venue::orderBy('name')
 		    ->pluck('name', 'id')
 		    ->all();
     	$event = Event::findOrFail($id);
@@ -179,7 +179,7 @@ class EventController extends Controller
 	    		return redirect('admin/oauth');
 		    }
 			$event = Event::findOrFail($id);
-	    	$ticket_sellers = TicketSeller::orderBy('name', 'asc')->pluck('name', 'id')->all();
+	    	$ticket_sellers = TicketSeller::orderBy('name')->pluck('name', 'id')->all();
 	    	return view('admin.events.ticket_seller_create', compact('ticket_sellers', 'event'));
 
 	    }elseif($request->isMethod('post')){
@@ -224,7 +224,7 @@ class EventController extends Controller
 	 * @param UrlShortener $urlShortener
 	 */
 	public function RefreshUrlClicks(UrlShortener $urlShortener){
-		$events = Event::whereDate('date', '>=', Carbon::today()->toDateString())->get();
+		$events = Event::upcoming()->get();
 		foreach($events as $event){
 			if($ticketSeller = $event->ticketSellersWithShortUrl->first()){
 				try{
@@ -242,7 +242,7 @@ class EventController extends Controller
     public function sendTextReminders(TextMessager $textMessager){
 		$six_weeks = Carbon::now()->addWeeks(6)->toDateString();
 	    $four_weeks = Carbon::now()->addWeeks(4)->toDateString();
-		$events = Event::whereDate('date', '<', $six_weeks)->whereDate('date', '>', $four_weeks)->where('six_week_reminder_sent', 0)->orderBy('date', 'asc')->get();
+		$events = Event::whereDate('date', '<', $six_weeks)->whereDate('date', '>', $four_weeks)->where('six_week_reminder_sent', 0)->orderBy('date')->get();
 		if($events->count() > 0){
 			$event = $events[0];
 			$city_id = $event->city_id;
@@ -273,7 +273,7 @@ class EventController extends Controller
 
 	    $two_weeks = Carbon::now()->addWeeks(2)->toDateString();
 		$now = Carbon::now()->toDateString();
-	    $events = Event::whereDate('date', '<', $two_weeks)->whereDate('date', '>', $now)->where('two_week_reminder_sent', 0)->orderBy('date', 'asc')->get();
+	    $events = Event::whereDate('date', '<', $two_weeks)->whereDate('date', '>', $now)->where('two_week_reminder_sent', 0)->orderBy('date')->get();
 	    if($events->count() > 0){
 		    $event = $events[0];
 		    $city_id = $event->city_id;

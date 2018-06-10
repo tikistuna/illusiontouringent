@@ -15,7 +15,7 @@ class FolderController extends Controller
      */
     public function index()
     {
-    	$folders = Folder::orderBy('id', 'asc')->get();
+    	$folders = Folder::orderBy('id')->get();
         return view('admin.folders.index', compact('folders'));
     }
 
