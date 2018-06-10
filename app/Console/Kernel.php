@@ -29,6 +29,9 @@ class Kernel extends ConsoleKernel
 	    $schedule->command('texts:send')->dailyAt('18:00')->timezone('America/Chicago');
 	    $schedule->command('monitor:check-uptime')->everyMinute();
 	    $schedule->command('monitor:check-certificate')->daily();
+	    $schedule->command('backup:clean')->dailyAt('2:00');
+	    $schedule->command('backup:run')->dailyAt('2:30');
+	    $schedule->command('backup:monitor')->dailyAt('3:00');
     }
 
     /**
