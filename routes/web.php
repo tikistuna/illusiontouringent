@@ -38,6 +38,7 @@ Route::group(['middleware'=>'admin'], function(){
 	Route::get('/api/admin/cities/lastCreated', 'CityController@api_last_created');
 	Route::get('/api/admin/folders/lastCreated', 'FolderController@api_last_created');
 	Route::get('/api/admin/ticket_sellers/lastCreated', 'TicketSellerController@api_last_created');
+	Route::patch('/api/events/toggle/{id}', 'EventController@toggleEventStatus');
 });
 
 Route::get('/', 'PublicController@index')->name('public.index');

@@ -213,6 +213,12 @@ class EventController extends Controller
 	    return json_encode(['lastCreated' => $date->diffForHumans()]);
     }
 
+    public function toggleEventStatus($id){
+		$event = Event::findOrFail($id);
+		$event->active = !$event->active;
+		$event->save();
+		return response('Success', 200);
+    }
 	/**
 	 * @param UrlShortener $urlShortener
 	 */
