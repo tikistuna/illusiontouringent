@@ -84,7 +84,6 @@
 		        cities: [],
 		        venues: [],
 		        selectedCity: '',
-		        selectedVenue: '',
 		        description: ''
 	        }
 		},
