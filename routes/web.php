@@ -17,7 +17,7 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::group(['middleware'=>'admin'], function(){
+Route::group(['middleware'=>'auth'], function(){
 	Route::get('/admin', 'AdminController@index');
 	Route::get('/admin/oauth', 'AdminController@oauth');
 	Route::resource('admin/events', 'EventController', ['except' => ['show']]);
