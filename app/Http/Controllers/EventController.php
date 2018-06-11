@@ -133,15 +133,13 @@ class EventController extends Controller
 
         $event = Event::findOrFail($id);
 
-        $illusion = $request->illusion ?? 0;
-
 	    $event->update([
 		    'name' => $request->name,
 		    'date' => $request->date,
 		    'description' => $request->description,
 		    'venue_id' => $request->venue_id,
 		    'reminder_description' => $request->reminder_description,
-		    'illusion' => $illusion,
+		    'illusion' => $request->illusion,
 	    ]);
 
 	    return redirect('/admin/events');
@@ -199,15 +197,16 @@ class EventController extends Controller
 	 * @return string
 	 */
 	public function api_index(){
-
 		return Event::orderBy('date', 'desc')->get()->toJson();
-
-
 	}
 
 	public function api_last_created(){
 	    $date = Event::orderBy('created_at', 'desc')->pluck('created_at')->first();
 	    return json_encode(['lastCreated' => $date->diffForHumans()]);
+    }
+
+    public function apiShow($id){
+		return Event::findOrFail($id);
     }
 
     public function toggleEventStatus($id){

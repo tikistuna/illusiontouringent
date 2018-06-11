@@ -30,11 +30,12 @@ Route::group(['middleware'=>'auth'], function(){
 	Route::match(['get', 'post'], '/admin/parse/file', 'AdminController@parse_file');
 
 	Route::get('/api/admin/events', 'EventController@api_index');
+	Route::get('/api/admin/events/lastCreated', 'EventController@api_last_created');
+	Route::get('/api/admin/events/{id}', 'EventController@apiShow');
 	Route::get('/api/admin/cities', 'CityController@api_index');
 	Route::get('/api/admin/ticket_sellers', 'TicketSellerController@api_index');
 	Route::get('/api/admin/venues', 'VenueController@api_index');
 	Route::get('/api/admin/folders', 'FolderController@api_index');
-	Route::get('/api/admin/events/lastCreated', 'EventController@api_last_created');
 	Route::get('/api/admin/cities/lastCreated', 'CityController@api_last_created');
 	Route::get('/api/admin/folders/lastCreated', 'FolderController@api_last_created');
 	Route::get('/api/admin/ticket_sellers/lastCreated', 'TicketSellerController@api_last_created');
