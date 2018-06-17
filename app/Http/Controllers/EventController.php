@@ -205,8 +205,13 @@ class EventController extends Controller
 	    return json_encode(['lastCreated' => $date->diffForHumans()]);
     }
 
-    public function apiShow($id){
-		return Event::findOrFail($id);
+    public function apiGetByAttribute($attribute = 'id', $value){
+		$event = Event::where($attribute, $value)->first();
+		if(!$event){
+			abort(404);
+		}
+
+		return $event;
     }
 
     public function toggleEventStatus($id){

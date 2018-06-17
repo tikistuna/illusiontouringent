@@ -77,16 +77,15 @@
                 swal('Oh no!', "An error occurred with the API", "error");
             });
 
-            axios.get('/api/admin/events/' + this.id).then(response => {
+            axios.get('/api/admin/events/id/' + this.id).then(response => {
                 let event = response.data;
-                this.description = event.description;
                 this.date = event.date;
                 this.selectedCity = event.venue.city.id;
                 this.selectedVenue = event.venue.id;
                 this.prices = event.pricesAsString;
                 this.illusionCheckBox = event.illusion;
-                console.log(event.illusion);
                 this.name = event.name;
+                this.description = event.description;
                 this.reminder_description = event.reminder_description;
             }, response => {
                 swal('Oh no!', "An error occurred with the API", "error");
@@ -110,6 +109,29 @@
 	            reminder_description: '',
 	            prices: '',
 	            name: '',
+            }
+        },
+
+        watch: {
+
+            selectedCity: function(newCity, oldCity){
+
+                this.hasChosenCity = true;
+
+                if(this.description !== '' && oldCity !== ''){
+                    let city = this.cities.find(city => {return city.id === this.selectedCity});
+	                let previousCity = this.cities.find(city => {return city.id === oldCity});
+	                this.replaceInDescriptions(previousCity.name, city.name);
+                }
+            },
+
+            selectedVenue: function(newVenue, oldVenue){
+
+                if(this.description !== '' && oldVenue !== ''){
+                    let venue = this.venues.find(venue => {return venue.id === this.selectedVenue});
+	                let previousVenue = this.venues.find(venue => {return venue.id === oldVenue});
+	                this.replaceInDescriptions(previousVenue.name, venue.name);
+                }
             }
         },
 
@@ -138,7 +160,15 @@
 	        illusion: function(){
               return this.illusionCheckBox ? 1 : 0;
 	        }
-        }
+        },
+
+	    methods: {
+            replaceInDescriptions: function(needle, replacement){
+                this.description = this.description.replace(needle, replacement);
+                this.reminder_description = this.reminder_description.replace(needle, replacement);
+                console.log('I ran with: ' + needle + replacement);
+            }
+	    }
     }
 </script>
 

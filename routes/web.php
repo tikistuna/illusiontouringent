@@ -31,7 +31,7 @@ Route::group(['middleware'=>'auth'], function(){
 
 	Route::get('/api/admin/events', 'EventController@api_index');
 	Route::get('/api/admin/events/lastCreated', 'EventController@api_last_created');
-	Route::get('/api/admin/events/{id}', 'EventController@apiShow');
+	Route::get('/api/admin/events/{attribute}/{id}', 'EventController@apiGetByAttribute');
 	Route::get('/api/admin/cities', 'CityController@api_index');
 	Route::get('/api/admin/ticket_sellers', 'TicketSellerController@api_index');
 	Route::get('/api/admin/venues', 'VenueController@api_index');
