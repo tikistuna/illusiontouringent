@@ -4,6 +4,11 @@
     Event
 @stop
 
+@section('head')
+    <meta name="appUrl" content="{{ env('APP_URL') }}">
+    <meta name="id" content="{{ $event->id }}">
+@stop
+
 @section('breadcrumb')
     <li class="breadcrumb-item">
         <a href="/admin/events">Events</a>
@@ -70,38 +75,13 @@
         <div class="card-body text-white">
             <h4 class="text-white font-weight-bold text-center">{{$event->name}} / {{$event->city->name}}</h4>
             <div class="mt-4">
-                {!! Form::model($event, ['method' => 'PATCH', 'action' => ['EventController@update', $event->id]]) !!}
-                <div class="form-group">
-                    {!! Form::label('name', 'Name:', ['class' => 'font-weight-bold']) !!}
-                    {!! Form::text('name', null, ['class'=>'form-control']) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('city_id', 'City:', ['class' => 'font-weight-bold']) !!}
-                    {!! Form::select('city_id', array(''=>'Select a City')  + $cities , null,['class'=>'form-control']) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('venue_id', 'Venue:', ['class' => 'font-weight-bold']) !!}
-                    {!! Form::select('venue_id', array(''=>'Select a Venue')  + $venues , null,['class'=>'form-control']) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('date', 'Date:', ['class' => 'font-weight-bold']) !!}
-                    {!! Form::date('date', $date, ['class' => 'form-control']) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('description', 'Description:', ['class' => 'font-weight-bold']) !!}
-                    {!! Form::textarea('description', null, ['class'=>'form-control', 'rows' => 3]) !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::label('reminder_description', 'Description for Reminder:', ['class' => 'font-weight-bold']) !!}
-                    {!! Form::textarea('reminder_description', null, ['class'=>'form-control', 'rows' => 3]) !!}
-                </div>
-                <div class="form-group">
-                    <a href="{{route('events.index')}}" class="btn btn-link text-light">Cancel</a>
-                    {!! Form::submit('Edit Event', ['class'=>'btn btn-primary']) !!}
-                </div>
-                {!! Form::close() !!}
+                <div id="app"></div>
             </div>
         </div>
     </div>
+@stop
+
+@section('scripts')
+    <script src="/js/admin_edit_events.js"></script>
 @stop
 
