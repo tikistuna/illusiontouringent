@@ -212,7 +212,7 @@ class SuscriberController extends Controller
 
     public function destroy_show()
     {
-	    $cities = City::orderBy('name', 'asc')
+	    $cities = City::orderBy('name')
 		    ->pluck('name', 'id')
 		    ->all();
 	    return view('suscribers.destroy', compact('cities'));
@@ -305,7 +305,7 @@ class SuscriberController extends Controller
 	public static function phoneSubscribersInCity($city_id){
     	return Phone::whereHas('suscriptions', function($query) use ($city_id){
     		    $query->where('cities.id', $city_id);
-    	})->where('status', 1)->where('blacklisted', 0)->orderBy('id', 'asc')->get();
+    	})->where('status', 1)->where('blacklisted', 0)->orderBy('id')->get();
 	}
 
 	public function getStats(){

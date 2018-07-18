@@ -16,7 +16,7 @@
 
 @section('main')
     <h1 class="h2 pl-2 pb-5 text-white" id="main-title">
-        Eventos Pasados en {{$city}}...
+        Eventos Pasados en {{$city->name}}...
     </h1>
     <ul class="flex-container pl-0">
         @for($i=0; $i<$count; $i++)

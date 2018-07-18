@@ -17,7 +17,7 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::group(['middleware'=>'admin'], function(){
+Route::group(['middleware'=>'auth'], function(){
 	Route::get('/admin', 'AdminController@index');
 	Route::get('/admin/oauth', 'AdminController@oauth');
 	Route::resource('admin/events', 'EventController', ['except' => ['show']]);
@@ -30,14 +30,16 @@ Route::group(['middleware'=>'admin'], function(){
 	Route::match(['get', 'post'], '/admin/parse/file', 'AdminController@parse_file');
 
 	Route::get('/api/admin/events', 'EventController@api_index');
+	Route::get('/api/admin/events/lastCreated', 'EventController@api_last_created');
+	Route::get('/api/admin/events/{attribute}/{id}', 'EventController@apiGetByAttribute');
 	Route::get('/api/admin/cities', 'CityController@api_index');
 	Route::get('/api/admin/ticket_sellers', 'TicketSellerController@api_index');
 	Route::get('/api/admin/venues', 'VenueController@api_index');
 	Route::get('/api/admin/folders', 'FolderController@api_index');
-	Route::get('/api/admin/events/lastCreated', 'EventController@api_last_created');
 	Route::get('/api/admin/cities/lastCreated', 'CityController@api_last_created');
 	Route::get('/api/admin/folders/lastCreated', 'FolderController@api_last_created');
 	Route::get('/api/admin/ticket_sellers/lastCreated', 'TicketSellerController@api_last_created');
+	Route::patch('/api/events/toggle/{id}', 'EventController@toggleEventStatus');
 });
 
 Route::get('/', 'PublicController@index')->name('public.index');

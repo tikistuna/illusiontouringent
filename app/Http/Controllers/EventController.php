@@ -29,7 +29,7 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-    	$sort = $request->query('sort') ?? '-date';
+    	$sort = $request->query('sort') ?? 'date';
 		return view('admin.events.index', compact('sort'));
     }
 
@@ -40,10 +40,10 @@ class EventController extends Controller
      */
     public function create()
     {
-    	$cities = City::orderBy('name', 'asc')
+    	$cities = City::orderBy('name')
 	                    ->pluck('name', 'id')
 		                ->all();
-	    $venues_raw = Venue::orderBy('name', 'asc')
+	    $venues_raw = Venue::orderBy('name')
 		    ->get();
 	    $venues = array();
 	    foreach($venues_raw as $venue){
@@ -61,7 +61,6 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        	'city_id' => 'bail|required|numeric|exists:cities,id',
         	'venue_id' => 'bail|required|numeric|exists:venues,id',
 	        'name' => 'required|string',
 	        'date' => 'required|date',
@@ -77,18 +76,14 @@ class EventController extends Controller
 	        'date' => $request->date,
 	        'description' => $request->description,
 	        'reminder_description' => $request->reminder_description,
-	        'city_id' => $request->city_id,
 	        'venue_id' => $request->venue_id,
 	        'illusion' => $illusion
         ]);
 
-        $prices = explode(' ', $request->prices);
+        $prices = explode(', ', $request->prices);
 
         foreach ($prices as $price){
-        	Price::create([
-        		'event_id' => $event->id,
-		        'price' => $price,
-	        ]);
+        	$event->prices()->create(['price' => $price]);
         }
 
 	    return redirect('/admin/photos/create');
@@ -102,10 +97,10 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-	    $cities = City::orderBy('name', 'asc')
+	    $cities = City::orderBy('name')
 		    ->pluck('name', 'id')
 		    ->all();
-	    $venues = Venue::orderBy('name', 'asc')
+	    $venues = Venue::orderBy('name')
 		    ->pluck('name', 'id')
 		    ->all();
     	$event = Event::findOrFail($id);
@@ -125,28 +120,37 @@ class EventController extends Controller
     {
 
 	    $request->validate([
-		    'city_id' => 'bail|required|numeric|exists:cities,id',
 		    'venue_id' => 'bail|required|numeric|exists:venues,id',
 		    'name' => 'required|string',
 		    'date' => 'required|date',
 		    'description' => 'required|string',
 		    'reminder_description' => 'required|string',
 		    'illusion' => 'nullable|boolean',
+		    'prices' => 'required|string',
 	    ]);
 
         $event = Event::findOrFail($id);
 
-        $illusion = $request->illusion ?? 0;
+	    /**
+	     * Updates the event info
+	     */
 
 	    $event->update([
 		    'name' => $request->name,
 		    'date' => $request->date,
 		    'description' => $request->description,
-		    'city_id' => $request->city_id,
 		    'venue_id' => $request->venue_id,
 		    'reminder_description' => $request->reminder_description,
-		    'illusion' => $illusion,
+		    'illusion' => $request->illusion,
 	    ]);
+
+	    /**
+	     * Updates the event's prices
+	     */
+	    $prices = collect(explode(', ', $request->prices));
+	    $event->updatePrices($prices);
+
+
 
 	    return redirect('/admin/events');
     }
@@ -179,7 +183,7 @@ class EventController extends Controller
 	    		return redirect('admin/oauth');
 		    }
 			$event = Event::findOrFail($id);
-	    	$ticket_sellers = TicketSeller::orderBy('name', 'asc')->pluck('name', 'id')->all();
+	    	$ticket_sellers = TicketSeller::orderBy('name')->pluck('name', 'id')->all();
 	    	return view('admin.events.ticket_seller_create', compact('ticket_sellers', 'event'));
 
 	    }elseif($request->isMethod('post')){
@@ -203,10 +207,7 @@ class EventController extends Controller
 	 * @return string
 	 */
 	public function api_index(){
-
-		return Event::with('city')->orderBy('date', 'desc')->get()->toJson();
-
-
+		return Event::upcoming()->orderBy('date')->get()->toJson();
 	}
 
 	public function api_last_created(){
@@ -214,11 +215,26 @@ class EventController extends Controller
 	    return json_encode(['lastCreated' => $date->diffForHumans()]);
     }
 
+    public function apiGetByAttribute($attribute = 'id', $value){
+		$event = Event::where($attribute, $value)->first();
+		if(!$event){
+			abort(404);
+		}
+
+		return $event;
+    }
+
+    public function toggleEventStatus($id){
+		$event = Event::findOrFail($id);
+		$event->active = !$event->active;
+		$event->save();
+		return response('Success', 200);
+    }
 	/**
 	 * @param UrlShortener $urlShortener
 	 */
 	public function RefreshUrlClicks(UrlShortener $urlShortener){
-		$events = Event::whereDate('date', '>=', Carbon::today()->toDateString())->get();
+		$events = Event::upcoming()->get();
 		foreach($events as $event){
 			if($ticketSeller = $event->ticketSellersWithShortUrl->first()){
 				try{
@@ -236,10 +252,10 @@ class EventController extends Controller
     public function sendTextReminders(TextMessager $textMessager){
 		$six_weeks = Carbon::now()->addWeeks(6)->toDateString();
 	    $four_weeks = Carbon::now()->addWeeks(4)->toDateString();
-		$events = Event::whereDate('date', '<', $six_weeks)->whereDate('date', '>', $four_weeks)->where('six_week_reminder_sent', 0)->orderBy('date', 'asc')->get();
+		$events = Event::whereDate('date', '<', $six_weeks)->whereDate('date', '>', $four_weeks)->where('six_week_reminder_sent', 0)->orderBy('date')->get();
 		if($events->count() > 0){
 			$event = $events[0];
-			$city_id = $event->city_id;
+			$city_id = $event->city->id;
 			$subscribers = SuscriberController::phoneSubscribersInCity($city_id);
 
 			if(empty($event->text_message)){
@@ -267,10 +283,10 @@ class EventController extends Controller
 
 	    $two_weeks = Carbon::now()->addWeeks(2)->toDateString();
 		$now = Carbon::now()->toDateString();
-	    $events = Event::whereDate('date', '<', $two_weeks)->whereDate('date', '>', $now)->where('two_week_reminder_sent', 0)->orderBy('date', 'asc')->get();
+	    $events = Event::whereDate('date', '<', $two_weeks)->whereDate('date', '>', $now)->where('two_week_reminder_sent', 0)->orderBy('date')->get();
 	    if($events->count() > 0){
 		    $event = $events[0];
-		    $city_id = $event->city_id;
+		    $city_id = $event->city->id;
 		    $subscribers = SuscriberController::phoneSubscribersInCity($city_id);
 
 		    if(empty($event->text_message)){

@@ -151,6 +151,10 @@
                                     </div>
                                 @endif
                             </div>
+                            <div class="form-group pt-1" style="font-size:0.8rem">
+                                {!! Form::checkbox('remember', 'yes') !!}
+                                {!! Form::label('remember', 'Remember me?') !!}
+                            </div>
                             <div class="form-group pt-2">
                                 {!! Form::submit('Login', ['class'=>'btn btn-primary btn-block']) !!}
                             </div>

@@ -29,7 +29,7 @@ class VenueController extends Controller
      */
     public function create()
     {
-        $cities = City::orderBy('name', 'asc')
+        $cities = City::orderBy('name')
 	                    ->pluck('name', 'id')
 	                    ->all();
         return view('admin.venues.create', compact('cities'));
@@ -71,7 +71,7 @@ class VenueController extends Controller
      */
     public function edit($id)
     {
-	    $cities = City::orderBy('name', 'asc')
+	    $cities = City::orderBy('name')
 		    ->pluck('name', 'id')
 		    ->all();
 	    $venue = Venue::findOrFail($id);
