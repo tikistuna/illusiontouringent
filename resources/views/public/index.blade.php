@@ -108,7 +108,7 @@
                             <div class="mt-3 event-tickets">
                                 <p>
                                     <i class="fa fa-usd"></i>
-                                    {{$event->getPrices()}}
+                                    {{$event->pricesAsString}}
                                 </p>
                                 <p class="mb-2" style="position:relative;left:-0.2em">
                                     <i class="fa fa-ticket"></i>

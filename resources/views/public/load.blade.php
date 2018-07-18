@@ -39,7 +39,7 @@ setlocale(LC_TIME, 'es_ES.UTF-8');
                             </p>
                             <p>
                                 <i class="fa fa-usd"></i>
-                                {{$event->getPrices()}}
+                                {{$event->pricesAsString}}
                             </p>
                             <div class="d-flex flex-row">
                                 @foreach($event->ticket_sellers as $ticket_seller)

@@ -12,19 +12,19 @@ class Event extends Model
 		'name',
 	    'date',
 	    'description',
-	    'city_id',
 	    'venue_id',
 	    'reminder_description',
 	    'illusion',
+	    'active'
     ];
 
-	protected $casts = ['four_week_reminder_sent' => 'boolean', 'six_week_reminder_sent' => 'boolean'];
+	protected $casts = ['four_week_reminder_sent' => 'boolean', 'six_week_reminder_sent' => 'boolean', 'active' => 'boolean'];
     protected $dates = ['date'];
-    protected $appends = ['dateFormatted', 'cityName', 'venueName'];
+    protected $appends = ['dateFormatted', 'cityName', 'venueName', 'pricesAsString'];
     protected $hidden = ['created_at', 'updated_at', 'city_id', 'venue_id'];
 
     public function city(){
-    	return $this->belongsTo('App\Models\City');
+    	return $this->venue->city();
     }
 
 	public function venue(){
@@ -47,19 +47,8 @@ class Event extends Model
 		return $this->belongsToMany('App\Models\TicketSeller')->withPivot('website')->wherePivot('website', 'LIKE', 'https://goo.gl%');
 	}
 
-	public function getPrices(){
-    	$count = $this->prices->count();
-    	$counter = 0;
-    	$prices_string = '';
-    	foreach($this->prices as $price){
-    		$prices_string .= $price->price;
-    		if($counter !== $count - 1){
-    			$prices_string .= ', ';
-		    }
-		    $counter++;
-	    }
-
-	    return $prices_string;
+	public function getPricesAsStringAttribute(){
+    	return implode(', ', $this->prices()->orderBy('price')->pluck('price')->toArray());
 	}
 
 	public function getDateFormatted(){
@@ -94,5 +83,34 @@ class Event extends Model
     	$msg = explode(' ', $this->reminder_description, 4);
     	[$event, $date, $venue, $description] = $msg;
     	return compact('event', 'date', 'venue', 'description');
+	}
+
+	/**
+	 * Scopes for Model
+	 */
+
+	public function scopeUpcoming($query){
+		return $query->whereDate('date', '>=', Carbon::today()->toDateString());
+	}
+
+	public function scopePast($query){
+		return $query->whereDate('date', '<', Carbon::today()->toDateString());
+	}
+
+	public function scopePublic($query){
+		return $query->where('active', 1);
+	}
+
+	public function updatePrices($prices){
+
+		$toBeRemoved = $this->prices()->pluck('price')->diff($prices);
+		if($toBeRemoved->count() > 0){
+			Price::where('event_id', $this->id)->whereIn('price', $toBeRemoved)->delete();
+		}
+
+		$toBeAdded = $prices->diff($this->prices()->pluck('price'));
+		foreach($toBeAdded as $price){
+			$this->prices()->create(['price'=> $price]);
+		}
 	}
 }

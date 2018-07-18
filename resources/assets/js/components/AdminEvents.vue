@@ -58,7 +58,6 @@
 	                        <i class="fa fa-arrow-up float-right" v-bind:class="{'text-dark': urlClicksAsc}" @click="sortEvents('urlClicks')"></i>
                         </th>
                         <th></th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -69,9 +68,13 @@
 	                            <td>{{event.venueName}}</td>
 	                            <td>{{event.dateFormatted}}</td>
 	                            <td>{{event.urlClicks}}</td>
-	                            <td><a :href="'/admin/eventTicketSeller/' + event.id">Add TicketSeller</a></td>
 	                            <td>
-                                    <button class="btn btn-link" @click="deleteEvent(event)">Delete</button>
+		                            <a class="p-1 settings-icon" @click.prevent="toggleEventStatus(event)">
+			                            <i class="fa" :class="{'fa-toggle-off': !event.active, 'fa-toggle-on': event.active, 'text-muted': !event.active, 'text-primary': event.active }"></i>
+		                            </a>
+		                            <a class="p-1 settings-icon" :href="'/admin/eventTicketSeller/' + event.id"><i class="fa fa-ticket text-dark" aria-hidden="true"></i></a>
+		                            <a :href="'/admin/events/' + event.id + '/edit'" class="p-1 settings-icon"><i class="fa fa-pencil-square-o text-success"></i></a>
+                                    <a class="p-1 settings-icon" @click.prevent="deleteEvent(event)"><i class="fa fa-trash-o text-danger"></i></a>
                                 </td>
                             </tr>
                         </template>
@@ -83,7 +86,6 @@
                         <th>Venue</th>
                         <th>Date</th>
                         <th>Url Clicks</th>
-                        <th></th>
                         <th></th>
                     </tr>
                     </tfoot>
@@ -158,12 +160,13 @@
             return{
                 events: [],
 	            eventsQueried: [],
-                sort: '-date',
+                sort: 'date',
 	            showing: 10,
 	            page: 1,
                 token: '',
 	            lastCreated: '',
-	            query: ''
+	            query: '',
+	            active: false
             }
         },
 
@@ -252,7 +255,7 @@
                                 _method: 'DELETE',
                                 _token: this.token
                             }).then((response) => {
-                                swal("Success", "Venue was deleted", "success");
+                                swal("Success", "Event was deleted", "success");
                                 self.events.splice(index, 1);
                                 self.eventsQueried.splice(indexQ, 1);
                             }).catch((response) => {
@@ -262,6 +265,28 @@
                     });
                 }
             },
+
+	        toggleEventStatus: function(lj_event){
+                let self = this;
+                let index = this.events.indexOf(lj_event);
+                let indexQ = this.eventsQueried.indexOf(lj_event);
+                if(index === -1 || indexQ === -1){
+                    swal("Error", "Couldn't find index of this Event", "error");
+                }else{
+                    axios.post('/api/events/toggle/' + lj_event.id, {
+                        _method: 'PATCH',
+                        _token: this.token
+                    }).then((response) => {
+                        console.log(response);
+                        let event = self.events[index];
+                        event.active = !event.active;
+                        self.events.splice(index, 1, event);
+                        self.eventsQueried.splice(indexQ, 1, event);
+                    }).catch((response) => {
+                        swal("Oh no!", "Looks like something went wrong.", "error");
+                    });
+                }
+	        },
 
 	        queryEvents: function(query){
                 if(!query){
@@ -291,4 +316,9 @@
     td{
         font-size: 0.85rem;
     }
+
+	.settings-icon:hover{
+		cursor: pointer;
+	}
+
 </style>
