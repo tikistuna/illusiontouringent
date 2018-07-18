@@ -6,7 +6,7 @@
 
 @section('head')
     <meta name="appUrl" content="{{ env('APP_URL') }}">
-    <meta name="date" content="{{ \Carbon\Carbon::now()->toDateTimeString() }}">
+    <meta name="date" content="{{ \Carbon\Carbon::now()->formatLocalized('%b %e, %Y %l:%M%p') }}">
 @stop
 
 @section('breadcrumbs')
