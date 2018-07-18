@@ -160,7 +160,7 @@
             return{
                 events: [],
 	            eventsQueried: [],
-                sort: '-date',
+                sort: 'date',
 	            showing: 10,
 	            page: 1,
                 token: '',

@@ -29,7 +29,7 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-    	$sort = $request->query('sort') ?? '-date';
+    	$sort = $request->query('sort') ?? 'date';
 		return view('admin.events.index', compact('sort'));
     }
 
@@ -210,7 +210,7 @@ class EventController extends Controller
 	 * @return string
 	 */
 	public function api_index(){
-		return Event::orderBy('date', 'desc')->get()->toJson();
+		return Event::upcoming()->orderBy('date')->get()->toJson();
 	}
 
 	public function api_last_created(){
