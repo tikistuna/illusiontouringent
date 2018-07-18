@@ -48,7 +48,7 @@ class Event extends Model
 	}
 
 	public function getPricesAsStringAttribute(){
-    	return implode(', ', $this->prices->pluck('price')->toArray());
+    	return implode(', ', $this->prices()->orderBy('price')->pluck('price')->toArray());
 	}
 
 	public function getDateFormatted(){
@@ -95,5 +95,18 @@ class Event extends Model
 
 	public function scopePast($query){
 		return $query->whereDate('date', '<', Carbon::today()->toDateString());
+	}
+
+	public function updatePrices($prices){
+
+		$toBeRemoved = $this->prices()->pluck('price')->diff($prices);
+		if($toBeRemoved->count() > 0){
+			Price::where('event_id', $this->id)->whereIn('price', $toBeRemoved)->delete();
+		}
+
+		$toBeAdded = $prices->diff($this->prices()->pluck('price'));
+		foreach($toBeAdded as $price){
+			$this->prices()->create(['price'=> $price]);
+		}
 	}
 }

@@ -129,9 +129,14 @@ class EventController extends Controller
 		    'description' => 'required|string',
 		    'reminder_description' => 'required|string',
 		    'illusion' => 'nullable|boolean',
+		    'prices' => 'required|string',
 	    ]);
 
         $event = Event::findOrFail($id);
+
+	    /**
+	     * Updates the event info
+	     */
 
 	    $event->update([
 		    'name' => $request->name,
@@ -141,6 +146,14 @@ class EventController extends Controller
 		    'reminder_description' => $request->reminder_description,
 		    'illusion' => $request->illusion,
 	    ]);
+
+	    /**
+	     * Updates the event's prices
+	     */
+	    $prices = collect(explode(', ', $request->prices));
+	    $event->updatePrices($prices);
+
+
 
 	    return redirect('/admin/events');
     }
