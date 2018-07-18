@@ -97,6 +97,10 @@ class Event extends Model
 		return $query->whereDate('date', '<', Carbon::today()->toDateString());
 	}
 
+	public function scopePublic($query){
+		return $query->where('active', 1);
+	}
+
 	public function updatePrices($prices){
 
 		$toBeRemoved = $this->prices()->pluck('price')->diff($prices);

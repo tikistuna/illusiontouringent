@@ -11,7 +11,7 @@ class PublicController extends Controller
 {
     public function index(){
 
-    	$events = Event::upcoming()->orderBy('date')->offset(0)->limit(8)->get();
+    	$events = Event::public()->upcoming()->orderBy('date')->offset(0)->limit(8)->get();
 	    $cities = City::orderBy('name')->pluck('name', 'id')->all();
 
     	return view('public.index', compact('events', 'cities'));
@@ -23,7 +23,7 @@ class PublicController extends Controller
     		    abort(400);
             }
 
-    		$events = $city->events()->upcoming()->orderBy('date')->offset(0)->limit(8)->get();
+    		$events = $city->events()->public()->upcoming()->orderBy('date')->offset(0)->limit(8)->get();
     		$cities = City::orderBy('name')->pluck('name', 'id')->all();
 
 		    return view('public.index', compact('events', 'cities', 'city'));
@@ -32,10 +32,10 @@ class PublicController extends Controller
     public function lazy_load($offset, $city = false){
 
 	    if ($city === false){
-		    $events = Event::upcoming()->orderBy('date')->offset($offset)->limit(8)->get();
+		    $events = Event::public()->upcoming()->orderBy('date')->offset($offset)->limit(8)->get();
 	    } else{
 	    	$city = City::findOrFail($city);
-		    $events = $city->events()->upcoming()->orderBy('date')->offset($offset)->limit(8)->get();
+		    $events = $city->events()->public()->upcoming()->orderBy('date')->offset($offset)->limit(8)->get();
 	    }
 
 		    if($events->count() > 0){
@@ -48,7 +48,7 @@ class PublicController extends Controller
 
     public function past($city = false){
     	if($city === false){
-    		$events = Event::past()->orderBy('date', 'desc')->get();
+    		$events = Event::public()->past()->orderBy('date', 'desc')->get();
     		$events = $events->groupBy('name');
     		$count = $events->count();
     		$keys = $events->keys();
@@ -58,7 +58,7 @@ class PublicController extends Controller
 			    abort(400);
 		    }
 
-		    $events = $city->events()->past()->orderBy('date', 'desc')->get();
+		    $events = $city->events()->public()->past()->orderBy('date', 'desc')->get();
 		    $events = $events->groupBy('name');
 		    $count = $events->count();
 		    $keys = $events->keys();
