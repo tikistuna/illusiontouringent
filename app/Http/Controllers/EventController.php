@@ -221,7 +221,7 @@ class EventController extends Controller
     }
 
     public function apiGetByAttribute($attribute = 'id', $value){
-		$event = Event::where($attribute, $value)->first();
+		$event = Event::where($attribute, $value)->get()->last();
 		if(!$event){
 			abort(404);
 		}
