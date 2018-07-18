@@ -7,6 +7,7 @@
 @section('head')
     <meta name="appUrl" content="{{ env('APP_URL') }}">
     <meta name="id" content="{{ $event->id }}">
+    <meta name="date" content="{{ $date }}">
 @stop
 
 @section('breadcrumb')

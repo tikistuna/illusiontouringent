@@ -60,6 +60,7 @@
             this.token = document.querySelector("meta[name='csrf-token']").content;
             this.appUrl = document.querySelector("meta[name='appUrl']").content;
             this.id = document.querySelector("meta[name='id']").content;
+            this.date = document.querySelector("meta[name='date']").content;
 
             axios.defaults.headers.common = {
                 'X-Requested-With': 'XMLHttpRequest',
@@ -79,7 +80,6 @@
 
             axios.get('/api/admin/events/id/' + this.id).then(response => {
                 let event = response.data;
-                this.date = event.date;
                 this.selectedCity = event.venue.city.id;
                 this.selectedVenue = event.venue.id;
                 this.prices = event.pricesAsString;
