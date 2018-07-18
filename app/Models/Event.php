@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\UrlShortener\UrlShortener;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Event extends Model
 {
@@ -113,4 +114,13 @@ class Event extends Model
 			$this->prices()->create(['price'=> $price]);
 		}
 	}
+
+  protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('illusion', function (Builder $builder) {
+            $builder->where('illusion', 1);
+        });
+    }
 }
