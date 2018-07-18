@@ -80,13 +80,10 @@ class EventController extends Controller
 	        'illusion' => $illusion
         ]);
 
-        $prices = explode(' ', $request->prices);
+        $prices = explode(', ', $request->prices);
 
         foreach ($prices as $price){
-        	Price::create([
-        		'event_id' => $event->id,
-		        'price' => $price,
-	        ]);
+        	$event->prices()->create(['price' => $price]);
         }
 
 	    return redirect('/admin/photos/create');
