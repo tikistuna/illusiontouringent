@@ -3,12 +3,14 @@
 		<input name="_token" type="hidden" :value="token">
 		<div class="form-group">
 			<label for="name" class="font-weight-bold">Name:</label>
-			<input class="form-control" name="name" type="text" id="name">
+			<input class="form-control" name="name" type="text" id="name" v-model="name">
 		</div>
 		<div class="form-group">
 			<label for="city_id" class="font-weight-bold">City:</label>
 			<select class="form-control" id="city_id" name="city_id" v-model="selectedCity">
-				<option value="" selected="selected">Select a City</option>
+				<template v-if="!hasChosenCity">
+					<option value="" selected="selected">Select a City</option>
+				</template>
 				<template v-for="city in cities">
 					<option :value="city.id">{{city.name}}</option>
 				</template>
@@ -16,7 +18,7 @@
 		</div>
 		<div class="form-group">
 			<label for="venue_id" class="font-weight-bold">Venue:</label>
-			<select class="form-control" id="venue_id" name="venue_id">
+			<select class="form-control" id="venue_id" name="venue_id" v-model="selectedVenue">
 				<option value="" selected="selected">Select a Venue</option>
 				<template v-for="venue in filteredVenues">
 					<option :value="venue.id">{{venue.name}}</option>
@@ -33,11 +35,11 @@
 		</div>
 		<div class="form-group">
 			<label for="description" class="font-weight-bold">Description:</label>
-			<textarea class="form-control" rows="3" name="description" cols="50" id="description"></textarea>
+			<textarea class="form-control" rows="3" name="description" cols="50" id="description" v-model="description"></textarea>
 		</div>
 		<div class="form-group">
 			<label for="reminder_description" class="font-weight-bold">Description for Reminder:</label>
-			<textarea class="form-control" rows="3" name="reminder_description" cols="50" id="reminder_description" v-model="description"></textarea>
+			<textarea class="form-control" rows="3" name="reminder_description" cols="50" id="reminder_description" v-model="reminder_description"></textarea>
 			<span :class="{'text-danger': maxCharsExceeded}" class="float-right pt-2" id="charsLeft">{{charactersLeft}}</span>
 		</div>
 		<div class="form-group">
@@ -53,6 +55,7 @@
 
 <script>
 	import axios from 'axios';
+	import _ from 'lodash';
 	export default {
 	    created(){
             this.token = document.querySelector("meta[name='csrf-token']").content;
@@ -74,6 +77,8 @@
             }, response => {
                 swal('Oh no!', "An error occurred with the API", "error");
             });
+
+            this.debouncedGetDescriptions = _.debounce(this.getDescriptions, 500);
 	    },
 
 		data(){
@@ -85,7 +90,11 @@
 		        venues: [],
 		        selectedCity: '',
 		        selectedVenue: '',
-		        description: ''
+		        description: '',
+		        name: '',
+		        reminder_description: '',
+		        descriptionEvent: {},
+		        hasChosenCity: false,
 	        }
 		},
 
@@ -95,7 +104,6 @@
 	            if(this.selectedCity === ''){
 	                return this.venues;
 	            }else{
-	                let cityId = this.selectedCity;
 	                return this.venues.filter(venue => {
 	                    return venue.city_id === this.selectedCity;
 	                });
@@ -103,12 +111,69 @@
 	        },
 
 			charactersLeft: function(){
-	            let length = this.description.length;
+	            let length = this.reminder_description.length;
 	            return length + ' / 160 ';
 			},
 
 			maxCharsExceeded: function(){
-	            return this.description.length > 160;
+	            return this.reminder_description.length > 160;
+			}
+		},
+
+		watch: {
+			name: function(newName, oldName){
+			    this.debouncedGetDescriptions();
+			},
+
+			selectedCity: function(newCity, oldCity){
+
+				this.hasChosenCity = true;
+
+				if(this.description !== ''){
+                    let city = this.cities.find(city => {return city.id === this.selectedCity});
+
+                    if(typeof this.descriptionEvent.city.name !== 'undefined'){
+                        this.replaceInDescriptions(this.descriptionEvent.city.name, city.name);
+                        this.descriptionEvent.city = {};
+                    }else{
+                        let previousCity = this.cities.find(city => {return city.id === oldCity});
+                        this.replaceInDescriptions(previousCity.name, city.name);
+                    }
+				}
+			},
+
+            selectedVenue: function(newVenue, oldVenue){
+
+                if(this.description !== ''){
+                    let venue = this.venues.find(venue => {return venue.id === this.selectedVenue});
+
+                    if(typeof this.descriptionEvent.venue.name !== 'undefined'){
+                        this.replaceInDescriptions(this.descriptionEvent.venue.name, venue.name);
+                        this.descriptionEvent.venue = {};
+                    }else{
+                        let previousVenue = this.venues.find(venue => {return venue.id === oldVenue});
+                        this.replaceInDescriptions(previousVenue.name, venue.name);
+                    }
+                }
+            }
+		},
+
+		methods: {
+	        getDescriptions: function(){
+                axios.get('/api/admin/events/name/' + this.name).then(response => {
+                    let event = response.data;
+                    this.description = event.description;
+                    this.reminder_description = event.reminder_description;
+					this.descriptionEvent = event;
+                }, response => {
+                    this.description = '';
+                    this.reminder_description = '';
+                });
+	        },
+
+			replaceInDescriptions: function(needle, replacement){
+                this.description = this.description.replace(needle, replacement);
+	            this.reminder_description = this.reminder_description.replace(needle, replacement);
 			}
 		}
 	}

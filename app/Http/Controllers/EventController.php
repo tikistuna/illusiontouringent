@@ -129,11 +129,14 @@ class EventController extends Controller
 		    'description' => 'required|string',
 		    'reminder_description' => 'required|string',
 		    'illusion' => 'nullable|boolean',
+		    'prices' => 'required|string',
 	    ]);
 
         $event = Event::findOrFail($id);
 
-        $illusion = $request->illusion ?? 0;
+	    /**
+	     * Updates the event info
+	     */
 
 	    $event->update([
 		    'name' => $request->name,
@@ -141,8 +144,16 @@ class EventController extends Controller
 		    'description' => $request->description,
 		    'venue_id' => $request->venue_id,
 		    'reminder_description' => $request->reminder_description,
-		    'illusion' => $illusion,
+		    'illusion' => $request->illusion,
 	    ]);
+
+	    /**
+	     * Updates the event's prices
+	     */
+	    $prices = collect(explode(', ', $request->prices));
+	    $event->updatePrices($prices);
+
+
 
 	    return redirect('/admin/events');
     }
@@ -199,15 +210,21 @@ class EventController extends Controller
 	 * @return string
 	 */
 	public function api_index(){
-
 		return Event::orderBy('date', 'desc')->get()->toJson();
-
-
 	}
 
 	public function api_last_created(){
 	    $date = Event::orderBy('created_at', 'desc')->pluck('created_at')->first();
 	    return json_encode(['lastCreated' => $date->diffForHumans()]);
+    }
+
+    public function apiGetByAttribute($attribute = 'id', $value){
+		$event = Event::where($attribute, $value)->first();
+		if(!$event){
+			abort(404);
+		}
+
+		return $event;
     }
 
     public function toggleEventStatus($id){

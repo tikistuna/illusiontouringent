@@ -255,7 +255,7 @@
                                 _method: 'DELETE',
                                 _token: this.token
                             }).then((response) => {
-                                swal("Success", "Venue was deleted", "success");
+                                swal("Success", "Event was deleted", "success");
                                 self.events.splice(index, 1);
                                 self.eventsQueried.splice(indexQ, 1);
                             }).catch((response) => {

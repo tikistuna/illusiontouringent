@@ -18,4 +18,5 @@ mix.js('resources/assets/js/app.js', 'public/js')
     .js('resources/assets/js/admin_ticket_sellers', 'public/js')
     .js('resources/assets/js/admin_venues', 'public/js')
     .js('resources/assets/js/admin_folders', 'public/js')
-    .js('resources/assets/js/admin_create_events', 'public/js');
+    .js('resources/assets/js/admin_create_events', 'public/js')
+    .js('resources/assets/js/admin_edit_events', 'public/js');
