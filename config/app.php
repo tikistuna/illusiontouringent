@@ -162,6 +162,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\TextMessagerServiceProvider::class,
 	    App\Providers\UrlShortenerServiceProvider::class,
+	    App\Providers\ComposerServiceProvider::class,
 
     ],
 

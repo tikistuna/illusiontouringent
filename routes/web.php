@@ -53,6 +53,7 @@ Route::get('/city/{city}', 'PublicController@by_city')->name('public.cities');
 Route::get('/past/{city?}', 'PublicController@past')->name('public.past');
 Route::post('/nexmo/delivery-receipt', 'SuscriberController@deliveryReceipt');
 Route::post('/mailgun/mail-recipient', 'AdminController@mailRecipient');
+Route::get('/navigation/{past?}', 'PublicController@navigation')->name('public.navigation');
 
 
 
