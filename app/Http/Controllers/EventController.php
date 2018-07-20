@@ -60,10 +60,11 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
         	'venue_id' => 'bail|required|numeric|exists:venues,id',
 	        'name' => 'required|string',
-	        'date' => 'required|date',
+	        'date' => 'required|string',
 	        'description' => 'required|string',
 	        'reminder_description' => 'required|string',
 	        'prices' => 'required|string',
@@ -71,9 +72,16 @@ class EventController extends Controller
         ]);
 
         $illusion = $request->illusion ?? 0;
+
+	    try{
+		    $date = Carbon::parse($request->date)->toDateTimeString();
+	    }catch(\Exception $e){
+		    return view('errors.400', ['message' => "No se pudo procesar la fecha. Asegúrese de que esté en el formato indicado"]);
+	    }
+
         $event = Event::create([
         	'name' => $request->name,
-	        'date' => $request->date,
+	        'date' => $date,
 	        'description' => $request->description,
 	        'reminder_description' => $request->reminder_description,
 	        'venue_id' => $request->venue_id,
@@ -97,16 +105,9 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-	    $cities = City::orderBy('name')
-		    ->pluck('name', 'id')
-		    ->all();
-	    $venues = Venue::orderBy('name')
-		    ->pluck('name', 'id')
-		    ->all();
     	$event = Event::findOrFail($id);
-    	$date = $event->date->toDateTimeString();
-
-        return view('admin.events.edit', compact('event', 'cities', 'venues', 'date'));
+	    $date = $event->date->formatLocalized('%b %e, %Y %l:%M%p');
+        return view('admin.events.edit', compact('event', 'date'));
     }
 
     /**
@@ -134,10 +135,14 @@ class EventController extends Controller
 	    /**
 	     * Updates the event info
 	     */
-
+	    try{
+		    $date = Carbon::parse($request->date)->toDateTimeString();
+	    }catch(\Exception $e){
+		    return view('errors.400', ['message' => "No se pudo procesar la fecha. Asegúrese de que esté en el formato indicado"]);
+	    }
 	    $event->update([
 		    'name' => $request->name,
-		    'date' => $request->date,
+		    'date' => $date,
 		    'description' => $request->description,
 		    'venue_id' => $request->venue_id,
 		    'reminder_description' => $request->reminder_description,
@@ -216,7 +221,7 @@ class EventController extends Controller
     }
 
     public function apiGetByAttribute($attribute = 'id', $value){
-		$event = Event::where($attribute, $value)->first();
+		$event = Event::where($attribute, $value)->get()->last();
 		if(!$event){
 			abort(404);
 		}

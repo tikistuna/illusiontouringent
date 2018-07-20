@@ -1,11 +1,3 @@
-<?php
-	$cities_prox = App\Models\City::whereHas('events', function ($query){
-		$query->whereDate('date', '>=', Carbon\Carbon::today()->toDateString())->where('illusion', 1);
-	})->orderBy('name')->pluck('name');
-	$cities_past = App\Models\City::whereHas('events', function ($query){
-		$query->whereDate('date', '<', Carbon\Carbon::today()->toDateString())->where('illusion', 1);
-	})->orderBy('name')->pluck('name');
-?>
 <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
     <div class="container">
         <img class="img-fluid navbar-img" src="/assets/logos/logo.png" width="150">
@@ -21,21 +13,28 @@
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Siguientes Eventos</a>
                     <div class="dropdown-menu bg-dark drop_menu">
-                        @foreach($cities_prox as $city)
+                        @if(isset($cities_prox))
+                            @foreach($cities_prox as $city)
+                                <div>
+                                    <a href="{{route('public.cities', ['city' => $city])}}" class="dropdown-item text-white">{{$city}}</a>
+                                </div>
+                             @endforeach
+                        @else
                             <div>
-                                <a href="{{route('public.cities', ['city' => $city])}}" class="dropdown-item text-white">{{$city}}</a>
+                                <a href="{{route('public.navigation')}}" class="dropdown-item text-white">Por Ciudad</a>
                             </div>
-                        @endforeach
+                            <div>
+                                <a href="{{route('public.index')}}" class="dropdown-item text-white">Todos</a>
+                            </div>
+                        @endif
                     </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Eventos Pasados</a>
                     <div class="dropdown-menu bg-dark drop_menu">
-                        @foreach($cities_past as $city)
-                            <div>
-                                <a href="{{route('public.past', ['city' => $city])}}" class="dropdown-item text-white">{{$city}}</a>
-                            </div>
-                        @endforeach
+                        <div>
+                            <a href="{{route('public.navigation', ['past' => 'true'])}}" class="dropdown-item text-white">Por Ciudad</a>
+                        </div>
                         <div>
                             <a href="{{route('public.past')}}" class="dropdown-item text-white">Todos</a>
                         </div>
