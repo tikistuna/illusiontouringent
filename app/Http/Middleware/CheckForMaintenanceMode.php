@@ -25,7 +25,8 @@ class CheckForMaintenanceMode
      */
     public function handle(Request $request, Closure $next)
     {
-    	if($this->app->isDownForMaintenance() && !in_array($request->getClientIp(), ['127.0.0.1' ,'173.174.99.180'])){
+
+    	if($this->app->isDownForMaintenance() && !in_array($request->getClientIp(), $_ENV['WHITELISTED_IP_ADDRESSES'])){
     		$maintenanceMode = new MaintenanceMode($this->app);
     		return $maintenanceMode->handle($request, $next);
 	    }

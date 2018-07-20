@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        $_ENV['WHITELISTED_IP_ADDRESSES'] = explode(' ', env('IP_ADDRESSES'));
     }
 
     /**
