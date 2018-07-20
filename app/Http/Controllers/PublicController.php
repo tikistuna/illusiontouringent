@@ -66,4 +66,23 @@ class PublicController extends Controller
 	    }
 
     }
+
+    public function navigation($past = false){
+	    if($past){
+		    $cities =  City::whereHas('events', function ($query){
+			    $query->past();
+		    })->orderBy('name')->get();
+		    $states = $cities->groupBy('full_state')->sortByDesc(function($state, $key){
+			    return count($state);
+		    });
+	    }else{
+		    $cities = City::whereHas('events', function ($query){
+			    $query->upcoming();
+		    })->orderBy('name')->get();
+		    $states = $cities->groupBy('full_state')->sortByDesc(function($state, $key){
+			    return count($state);
+		    });
+	    }
+	    return view('public.city-navigation', compact('past', 'states'));
+    }
 }
