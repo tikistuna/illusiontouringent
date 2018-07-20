@@ -21,7 +21,7 @@
         @endif
             <div class="d-flex flex-row flex-wrap justify-content-around mt-5" id="city-menu">
                 @foreach($states as $state)
-                    <div class="mx-5 my-4">
+                    <div class="mx-md-5 mr-3 my-4">
                         <h2 class="h1">{{$state[0]['full_state']}}</h2>
                         <ul class="list-group">
                             @foreach($state as $city)
