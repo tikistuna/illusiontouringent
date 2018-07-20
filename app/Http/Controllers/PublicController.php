@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Event;
-use Carbon\Carbon;
 
 
 class PublicController extends Controller
