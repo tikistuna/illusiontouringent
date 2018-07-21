@@ -5,6 +5,7 @@
 
 
 	use App\Models\City;
+	use Illuminate\Support\Facades\Route;
 	use Illuminate\Support\Facades\View;
 	use Illuminate\Support\ServiceProvider;
 	use Jenssegers\Agent\Agent;
@@ -14,16 +15,17 @@
 		public function boot(){
 
 			View::composer(['public.navigation'], function($view){
-
+				$uri = Route::current()->uri();
+				$needsRegister = ($uri === "/" or $uri === "city/{city}");
 				$agent = new Agent();
 				$isMobile = $agent->isMobile();
 				$cities = City::whereHas('events', function ($query){
 				$query->upcoming();
 				})->orderBy('name')->pluck('name');
 				if($cities->count() <= 9){
-					$view->with('cities_prox', $cities)->with('isMobile', $isMobile);
+					$view->with('cities_prox', $cities)->with('isMobile', $isMobile)->with('needsRegister', $needsRegister);
 				}else{
-					$view->with('isMobile', $isMobile);
+					$view->with('isMobile', $isMobile)->with('needsRegister', $needsRegister);
 				}
 
 
