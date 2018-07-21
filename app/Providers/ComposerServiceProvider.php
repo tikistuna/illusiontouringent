@@ -22,7 +22,11 @@
 				})->orderBy('name')->pluck('name');
 				if($cities->count() <= 9){
 					$view->with('cities_prox', $cities)->with('isMobile', $isMobile);
+				}else{
+					$view->with('isMobile', $isMobile);
 				}
+
+
 
 			});
 
