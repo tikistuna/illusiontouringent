@@ -5,6 +5,7 @@
 @stop
 
 @section('messages')
+    @php $isMobile = true; @endphp
     @if(session('message_email'))
         <div class="alert alert-primary alert-dismissible fade show" id="dismissible-email">
             <button data-dismiss="alert" class="close" type="button">
@@ -163,9 +164,9 @@
         <i class="fa fa-spinner fa-pulse text-white" style="font-size:5em"></i>
     </section>
     @if($isMobile)
-        <section class="row mb-4 container">
-            <div class="col-1 mx-auto">
-                <button class="btn btn-outline-light mx-auto" id="lazy-loader">Ver m&aacute;s</button>
+        <section>
+            <div class="text-center">
+                <button class="btn btn-outline-light" id="lazy-loader">Ver m&aacute;s</button>
             </div>
         </section>
     @endif
