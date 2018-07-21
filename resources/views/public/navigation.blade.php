@@ -40,6 +40,11 @@
                         </div>
                     </div>
                 </li>
+                {{--@if($isMobile)--}}
+                    <li class="nav-item">
+                        <a href="#suscribe-bottom" class="nav-link">Reg&iacute;strate&#33;</a>
+                    </li>
+                {{--@endif--}}
             </ul>
         </div>
     </div>

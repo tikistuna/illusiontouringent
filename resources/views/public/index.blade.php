@@ -25,6 +25,7 @@
 @stop
 
 @section('main')
+    @php $isMobile = true; @endphp
     <div id="featuring-video">
         <div class="iframe-wrapper">
             <iframe src="https://www.youtube.com/embed/T30ddyWa38M?rel=0&amp;showinfo=0" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
@@ -162,6 +163,13 @@
     <section id="loading" class="text-center text-white py-5 d-none">
         <i class="fa fa-spinner fa-pulse text-white" style="font-size:5em"></i>
     </section>
+    @if($isMobile)
+        <section class="row mb-4 container">
+            <div class="col-1 mx-auto">
+                <button class="btn btn-outline-light mx-auto" id="lazy-loader">Ver m&aacute;s</button>
+            </div>
+        </section>
+    @endif
     <div class="container py-5" id="suscribe-bottom">
         <div>
             <div class="card bg-dark card-form">
@@ -216,37 +224,51 @@
         var busy = false;
 
         function lazyLoader(){
-            if($(window).scrollTop() + $(window).height() > $(document).height() - 500 && !(busy) ){
-
-                loading.removeClass('d-none');
-                busy = true;
-                var offset = $(".event-section").last()[0].dataset.id;
-
-                var request = $.ajax({
-                    async: true,
-                    type: "GET",
-                    url: "/load/" + offset <?php echo (isset($city) ? "+'/{$city->id}'" : '') ?>,
-                    dataType: 'json',
-                    success: function(events) {
-                        if(events.status === 'success'){
-                            $(events.html).insertBefore("#loading");
-                            busy = false;
-                            loading.addClass("d-none");
-                            $('[data-toggle="popover"]').popover();
-                        }else{
-                            loading.addClass("d-none");
-                        }
-                    }
-                });
+            @if(!$isMobile)
+                if($(window).scrollTop() + $(window).height() > $(document).height() - 500 && !(busy) ) {
 
 
-            }
+                @endif
+
+                        loading.removeClass('d-none');
+                        busy = true;
+                        var offset = $(".event-section").last()[0].dataset.id;
+
+                        var request = $.ajax({
+                            async: true,
+                            type: "GET",
+                            url: "/load/" + offset <?php echo(isset($city) ? "+'/{$city->id}'" : '') ?>,
+                            dataType: 'json',
+                            success: function (events) {
+                                if (events.status === 'success') {
+                                    $(events.html).insertBefore("#loading");
+                                    busy = false;
+                                    $('[data-toggle="popover"]').popover();
+                                } else {
+                                    @if($isMobile)
+                                        $('#lazy-loader').addClass("d-none");
+                                    @endif
+                                }
+
+                                loading.addClass("d-none");
+                            }
+                        });
+
+                        @if(!$isMobile)
+                            }
+                        @endif
+
         }
 
         $(document).ready(function(){
             $('[data-toggle="popover"]').popover();
             $(document).on("click", ".iframe-toggler",changeMap);
-            $(window).scroll(lazyLoader);
+            @if($isMobile)
+                $('#lazy-loader').click(lazyLoader);
+            @else
+                $(window).scroll(lazyLoader);
+            @endif
+
         });
 
     </script>
