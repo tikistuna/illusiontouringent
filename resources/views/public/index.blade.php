@@ -164,7 +164,7 @@
         <i class="fa fa-spinner fa-pulse text-white" style="font-size:5em"></i>
     </section>
     @if($isMobile)
-        <section class="row mb-4">
+        <section class="row mb-4 container">
             <div class="col-1 mx-auto">
                 <button class="btn btn-outline-light mx-auto" id="lazy-loader">Ver m&aacute;s</button>
             </div>
