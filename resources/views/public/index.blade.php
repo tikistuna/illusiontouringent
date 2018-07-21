@@ -25,7 +25,6 @@
 @stop
 
 @section('main')
-    @php $isMobile = true; @endphp
     <div id="featuring-video">
         <div class="iframe-wrapper">
             <iframe src="https://www.youtube.com/embed/T30ddyWa38M?rel=0&amp;showinfo=0" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
