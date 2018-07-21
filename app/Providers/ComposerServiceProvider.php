@@ -7,6 +7,7 @@
 	use App\Models\City;
 	use Illuminate\Support\Facades\View;
 	use Illuminate\Support\ServiceProvider;
+	use Jenssegers\Agent\Agent;
 
 	class ComposerServiceProvider extends ServiceProvider
 	{
@@ -20,6 +21,12 @@
 				if($cities->count() <= 9){
 					$view->with('cities_prox', $cities);
 				}
+			});
+
+			View::composer(['public.index'], function($view){
+				$agent = new Agent();
+				$isMobile = $agent->isMobile();
+				$view->with('isMobile', $isMobile)->with('agent', $agent);
 			});
 		}
 	}
