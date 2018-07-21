@@ -5,7 +5,6 @@
 @stop
 
 @section('messages')
-    @php $isMobile = true; @endphp
     @if(session('message_email'))
         <div class="alert alert-primary alert-dismissible fade show" id="dismissible-email">
             <button data-dismiss="alert" class="close" type="button">
