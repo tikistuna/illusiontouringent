@@ -27,6 +27,10 @@
                         {!! Form::text('state', null, ['class'=>'form-control']) !!}
                     </div>
                     <div class="form-group">
+                        {!! Form::label('full_state', 'Full State:') !!}
+                        {!! Form::text('full_state', null, ['class'=>'form-control']) !!}
+                    </div>
+                    <div class="form-group">
                         <a href="{{route('cities.index')}}" class="btn btn-link text-light">Cancel</a>
                         {!! Form::submit('Submit', ['class'=>'btn btn-primary']) !!}
                     </div>
