@@ -39,6 +39,7 @@ class CityController extends Controller
 	    $request->validate([
 		    'name' => 'required|string',
 		    'state' => 'required|string',
+		    'full_state' => 'required|string',
 	    ]);
 
         City::create($request->all());
@@ -79,6 +80,8 @@ class CityController extends Controller
     {
 	    $request->validate([
 		    'name' => 'required|string',
+		    'state' => 'required|string',
+		    'full_state' => 'required|string',
 	    ]);
 
         City::findOrFail($id)->update($request->all());
