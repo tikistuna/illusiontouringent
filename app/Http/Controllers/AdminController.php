@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Contracts\UrlShortener\UrlShortener;
 use App\Models\City;
 use App\Models\Email;
+use App\Models\Event;
 use App\Models\InboundMail;
 use App\Models\Phone;
 use App\Models\SubscriberStatistic;
@@ -34,6 +35,13 @@ class AdminController extends Controller
 		$max += intdiv($diff, 8);
 		$min -= intdiv($diff, 8);
 		return view('admin.index', compact( 'data', 'min', 'max', 'dates'));
+	}
+
+	public function excel(Request $request){
+		if($request->isMethod('get')){
+			$events = Event::upcoming()->orderBy('date')->get();
+			return view('admin.excel', compact('events'));
+		}
 	}
 
 	public function oauth(Request $request, UrlShortener $urlShortener){
