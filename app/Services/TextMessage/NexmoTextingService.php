@@ -44,9 +44,9 @@
         public function text($number, $message){
 
 			if($number instanceof Phone){
-				/*if(env('APP_ENV') === 'local'){
+				if(env('APP_ENV') === 'local'){
 					return $this->mock_text($number, $message);
-				}*/
+				}
 				return $this->text_phone($number, $message);
 			}
 		}
