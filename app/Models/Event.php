@@ -18,7 +18,7 @@ class Event extends Model
 	    'active'
     ];
 
-	protected $casts = ['four_week_reminder_sent' => 'boolean', 'six_week_reminder_sent' => 'boolean', 'active' => 'boolean'];
+	protected $casts = ['two_week_reminder_sent' => 'boolean', 'one_week_reminder_sent' => 'boolean', 'active' => 'boolean'];
     protected $dates = ['date'];
     protected $appends = ['dateFormatted', 'cityName', 'venueName', 'pricesAsString'];
     protected $hidden = ['created_at', 'updated_at', 'city_id', 'venue_id'];
