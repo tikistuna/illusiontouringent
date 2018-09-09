@@ -113,4 +113,10 @@ class Event extends Model
 			$this->prices()->create(['price'=> $price]);
 		}
 	}
+
+	public function firstLetterOfDay(){
+		$day = $this->date->dayOfWeek;
+		$days = ['L', 'Ma', 'Mi', 'J', 'V', 'S', 'D'];
+		return $days[$day];
+	}
 }

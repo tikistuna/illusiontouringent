@@ -260,8 +260,8 @@ class EventController extends Controller
 	    $one_week = Carbon::now()->addWeek()->toDateString();
         $one_week_comp = Carbon::now()->addWeek()->subDay()->toDateString();
 
-	    $events_two_weeks = Event::whereDate('date', '<=', $two_weeks)->whereDate('date', '>', $two_weeks_comp)->where('two_week_reminder_sent', 0)->get();
-	    $events_one_week = Event::whereDate('date', '<=', $one_week)->whereDate('date', '>', $one_week_comp)->where('one_week_reminder_sent', 0)->get();
+	    $events_two_weeks = Event::public()->whereDate('date', '<=', $two_weeks)->whereDate('date', '>', $two_weeks_comp)->where('two_week_reminder_sent', 0)->get();
+	    $events_one_week = Event::public()->whereDate('date', '<=', $one_week)->whereDate('date', '>', $one_week_comp)->where('one_week_reminder_sent', 0)->get();
 
 	    foreach($events_two_weeks as $event){
 

@@ -17,7 +17,7 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::group(['middleware'=>'auth'], function(){
+Route::middleware(['auth', 'admin'])->group(function(){
 	Route::get('/admin', 'AdminController@index');
 	Route::get('/admin/oauth', 'AdminController@oauth');
 	Route::resource('admin/events', 'EventController', ['except' => ['show']]);
@@ -27,6 +27,7 @@ Route::group(['middleware'=>'auth'], function(){
 	Route::resource('admin/venues', 'VenueController');
 	Route::resource('admin/ticket_sellers', 'TicketSellerController');
 	Route::match(['get', 'post'] ,'/admin/eventTicketSeller/{id}', 'EventController@eventTicketSeller')->name('event_ticket_seller');
+	Route::match(['get', 'post'], '/admin/excel', 'AdminController@excel');
 	Route::match(['get', 'post'], '/admin/parse/file', 'AdminController@parse_file');
 
 	Route::get('/api/admin/events', 'EventController@api_index');

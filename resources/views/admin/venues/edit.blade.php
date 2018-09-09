@@ -73,8 +73,20 @@
                     {!! Form::text('name', null, ['class'=>'form-control']) !!}
                 </div>
                 <div class="form-group">
-                    {!! Form::label('city_id', 'City:') !!}
-                    {!! Form::select('city_id', array(''=>'Select a City')  + $cities , null,['class'=>'form-control']) !!}
+                    {!! Form::label('website', 'Website:') !!}
+                    {!! Form::text('website', null, ['class'=>'form-control']) !!}
+                </div>
+                <div class="form-group">
+                    {!! Form::label('address', 'Address:') !!}
+                    {!! Form::text('address', null, ['class'=>'form-control']) !!}
+                </div>
+                <div class="form-group">
+                    {!! Form::label('hours', 'Hours:') !!}
+                    {!! Form::text('hours', null, ['class'=>'form-control']) !!}
+                </div>
+                <div class="form-group">
+                    {!! Form::label('phone', 'Phone:') !!}
+                    {!! Form::text('phone', null, ['class'=>'form-control']) !!}
                 </div>
                 <div class="form-group">
                     <a href="{{route('venues.index')}}" class="btn btn-link text-light">Cancel</a>
