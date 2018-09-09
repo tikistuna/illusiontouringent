@@ -8,7 +8,10 @@ class Venue extends Model
 {
     protected $fillable = [
     	'name',
-	    'city_id',
+        'address',
+        'website',
+        'phone',
+        'hours'
     ];
 
     protected $appends = ['cityName'];

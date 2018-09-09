@@ -9,9 +9,12 @@ use App\Models\Event;
 use App\Models\InboundMail;
 use App\Models\Phone;
 use App\Models\SubscriberStatistic;
+use App\Models\TicketSeller;
+use App\Models\Venue;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 
 class AdminController extends Controller
@@ -40,8 +43,14 @@ class AdminController extends Controller
 	public function excel(Request $request){
 		if($request->isMethod('get')){
 			$events = Event::upcoming()->orderBy('date')->get();
-			return view('admin.excel', compact('events'));
-		}
+			return view('admin.excel.browser', compact('events'));
+		}elseif($request->isMethod('post')){
+            $events = Event::upcoming()->orderBy('date')->get();
+		    $view = View::make('admin.excel.download', compact('events'));
+		    return response()->streamDownload(function() use($view){
+                echo (string)$view;
+            },'eventos.xls');
+        }
 	}
 
 	public function oauth(Request $request, UrlShortener $urlShortener){
