@@ -27,6 +27,7 @@ Route::group(['middleware'=>'auth'], function(){
 	Route::resource('admin/venues', 'VenueController');
 	Route::resource('admin/ticket_sellers', 'TicketSellerController');
 	Route::match(['get', 'post'] ,'/admin/eventTicketSeller/{id}', 'EventController@eventTicketSeller')->name('event_ticket_seller');
+	Route::match(['get', 'post'], '/admin/excel', 'AdminController@excel');
 	Route::match(['get', 'post'], '/admin/parse/file', 'AdminController@parse_file');
 
 	Route::get('/api/admin/events', 'EventController@api_index');

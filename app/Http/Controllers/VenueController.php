@@ -43,12 +43,17 @@ class VenueController extends Controller
      */
     public function store(Request $request)
     {
-	    $request->validate([
-		    'city_id' => 'bail|required|numeric|exists:cities,id',
-		    'name' => 'required|string',
-	    ]);
+        $request->validate([
+            'name' => 'required|string',
+            'phone' => 'nullable|string',
+            'address' => 'required_without:website|nullable|string',
+            'hours' => 'nullable|string',
+            'website' => 'required_without_all:phone,address|nullable|url',
+            'city_id' => 'required|numeric|exists:cities,id'
+        ]);
 
-        Venue::create($request->all());
+        $city = City::find($request->city_id);
+        $city->venues()->create($request->all());
         return redirect('/admin/venues');
     }
 
@@ -71,12 +76,8 @@ class VenueController extends Controller
      */
     public function edit($id)
     {
-	    $cities = City::orderBy('name')
-		    ->pluck('name', 'id')
-		    ->all();
-	    $venue = Venue::findOrFail($id);
-
-	    return view('admin.venues.edit', compact('cities', 'venue'));
+        $venue = Venue::findOrFail($id);
+	    return view('admin.venues.edit', compact( 'venue'));
     }
 
     /**
@@ -89,10 +90,14 @@ class VenueController extends Controller
     public function update(Request $request, $id)
     {
 
-	    $request->validate([
-		    'city_id' => 'bail|required|numeric|exists:cities,id',
-		    'name' => 'required|string',
-	    ]);
+        $request->validate([
+            'name' => 'required|string',
+            'phone' => 'nullable|string',
+            'address' => 'required_without:website|nullable|string',
+            'hours' => 'nullable|string',
+            'website' => 'required_without_all:phone,address|nullable|url',
+        ]);
+
         Venue::findOrFail($id)->update($request->all());
         return redirect('/admin/venues');
     }
