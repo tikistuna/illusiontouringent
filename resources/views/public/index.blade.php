@@ -41,10 +41,6 @@
                         {!! Form::text('name', null, ['class'=>'form-control']) !!}
                     </div>
                     <div class="form-group">
-                        {!! Form::label('email', 'E-mail:', ['class'=>'text-white font-weight-bold']) !!}
-                        {!! Form::text('email', null, ['class'=>'form-control']) !!}
-                    </div>
-                    <div class="form-group">
                         {!! Form::label('phone', 'Teléfono:', ['class'=>'text-white font-weight-bold']) !!}
                         {!! Form::text('phone', null, ['class'=>'form-control']) !!}
                     </div>

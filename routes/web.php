@@ -46,14 +46,12 @@ Route::middleware(['auth', 'admin'])->group(function(){
 Route::get('/', 'PublicController@index')->name('public.index');
 Route::get('/load/{id}/{city?}', 'PublicController@lazy_load');
 Route::get('/suscribers/verification/phone/{phone}/{validation_code}', 'SuscriberController@validate_phone');
-Route::get('/suscribers/verification/email/{email}/{validation_code}', 'SuscriberController@validate_email');
 Route::get('/suscribers/unsuscribe', 'SuscriberController@destroy_show')->name('suscribers.destroy');
 Route::delete('/suscribers/unsuscribe', 'SuscriberController@destroy');
 Route::resource('suscribers', 'SuscriberController', ['only' => ['store']]);
 Route::get('/city/{city}', 'PublicController@by_city')->name('public.cities');
 Route::get('/past/{city?}', 'PublicController@past')->name('public.past');
 Route::post('/nexmo/delivery-receipt', 'SuscriberController@deliveryReceipt');
-Route::post('/mailgun/mail-recipient', 'AdminController@mailRecipient');
 Route::get('/navigation/{past?}', 'PublicController@navigation')->name('public.navigation');
 
 
