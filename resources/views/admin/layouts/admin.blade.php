@@ -84,10 +84,10 @@ $notifications = $user->notifications;
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-                        <a class="nav-link" href="#">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Excel">
+                        <a class="nav-link" href="/admin/excel">
                             <i class="fa fa-fw fa-link"></i>
-                            <span class="nav-link-text">Link</span>
+                            <span class="nav-link-text">Excel</span>
                         </a>
                     </li>
                 </ul>

@@ -15,10 +15,6 @@
                     <div class="mt-4">
                         {!! Form::open(['method' => 'DELETE', 'action' => 'SuscriberController@destroy']) !!}
                         <div class="form-group">
-                            {!! Form::label('email', 'Email:') !!}
-                            {!! Form::text('email', null, ['class'=>'form-control']) !!}
-                        </div>
-                        <div class="form-group">
                             {!! Form::label('phone', 'Tel&eacute;fono:') !!}
                             {!! Form::text('phone', null, ['class'=>'form-control']) !!}
                         </div>

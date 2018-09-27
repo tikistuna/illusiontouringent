@@ -44,9 +44,9 @@
         public function text($number, $message){
 
 			if($number instanceof Phone){
-				/*if(env('APP_ENV') === 'local'){
+				if(env('APP_ENV') === 'local'){
 					return $this->mock_text($number, $message);
-				}*/
+				}
 				return $this->text_phone($number, $message);
 			}
 		}
@@ -86,13 +86,21 @@
                     return $validity;
                 }else{
                 	if(isset($body->request_id)){
-		                Log::error('Nexmo Validation Error', ['Request Id' => $body->request_id]);
+		                Log::error('Nexmo Validation Error', [
+		                	'Request Id' => $body->request_id,
+			                'status' => (int)$body->status,
+			                'valid?' => $body->valid_number,
+			                ]);
 	                }else{
                 		Log::error('Nexmo Validation Error', ['Response Body' => json_encode($body)]);
 	                }
 
                     event(new PhoneValidationFailed($phone, $body));
-                    throw new ValidatePhoneException('Nexmo Validation Error. Phone: ' . $phone->phone);
+                    if((int)$body->status === 0 and $body->valid_number === 'unknown'){
+                    	return true;
+                    }else{
+						throw new ValidatePhoneException('Nexmo Validation Error. Phone: ' . $phone->phone);
+                    }
                 }
             }catch(GuzzleException $exception){
                 Log::error('Guzzle Exception Validation Error', ['Phone: ' => $phone->phone]);

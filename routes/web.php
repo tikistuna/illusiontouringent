@@ -16,7 +16,6 @@
 Route::get('/', 'PublicController@index')->name('public.index');
 Route::get('/load/{id}/{city?}', 'PublicController@lazy_load');
 Route::get('/suscribers/verification/phone/{phone}/{validation_code}', 'SuscriberController@validate_phone');
-Route::get('/suscribers/verification/email/{email}/{validation_code}', 'SuscriberController@validate_email');
 Route::get('/suscribers/unsuscribe', 'SuscriberController@destroy_show')->name('suscribers.destroy');
 Route::delete('/suscribers/unsuscribe', 'SuscriberController@destroy');
 Route::resource('suscribers', 'SuscriberController', ['only' => ['store']]);

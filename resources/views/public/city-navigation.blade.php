@@ -10,6 +10,16 @@
         #city-menu{
             min-height: calc(100vh - 200px);
         }
+
+        @media screen and (max-width: 30em){
+            h1{
+                font-size: 2.2rem !important;
+            }
+
+            h2.h1{
+                font-size: 1.8rem !important;
+            }
+        }
     </style>
 @stop
 @section('main')
@@ -19,9 +29,9 @@
         @else
             <h1>Siguientes eventos en tu ciudad...</h1>
         @endif
-            <div class="d-flex flex-row flex-wrap justify-content-around mt-5" id="city-menu">
+            <div class="row mt-5" id="city-menu">
                 @foreach($states as $state)
-                    <div class="mx-md-5 mr-3 my-4">
+                    <div class="col-6 px-4 mx-md-5 my-4">
                         <h2 class="h1">{{$state[0]['full_state']}}</h2>
                         <ul class="list-group">
                             @foreach($state as $city)

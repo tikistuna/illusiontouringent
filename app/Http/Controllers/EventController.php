@@ -255,66 +255,70 @@ class EventController extends Controller
     }
 
     public function sendTextReminders(TextMessager $textMessager){
-		$six_weeks = Carbon::now()->addWeeks(6)->toDateString();
-	    $four_weeks = Carbon::now()->addWeeks(4)->toDateString();
-		$events = Event::whereDate('date', '<', $six_weeks)->whereDate('date', '>', $four_weeks)->where('six_week_reminder_sent', 0)->orderBy('date')->get();
-		if($events->count() > 0){
-			$event = $events[0];
-			$city_id = $event->city->id;
-			$subscribers = SuscriberController::phoneSubscribersInCity($city_id);
-
-			if(empty($event->text_message)){
-				$event->six_week_reminder_sent = 2;
-				$event->save();
-				return;
-			}
-
-            $event->six_week_reminder_sent = 1;
-            $event->save();
-
-            foreach($subscribers as $subscriber){
-                try{
-                    $textMessager->text($subscriber, $event->text_message);
-                }catch(TextMessageException $e){
-                    $event->six_week_reminder_sent = 2;
-                    $event->save();
-                    report(new TextMessageException('Automated messaging failed for event: ' . $event->id . ' At subscriber: ' . $subscriber->id));
-                    return;
-                }
-
-            }
-
-		}
-
 	    $two_weeks = Carbon::now()->addWeeks(2)->toDateString();
-		$now = Carbon::now()->toDateString();
-	    $events = Event::whereDate('date', '<', $two_weeks)->whereDate('date', '>', $now)->where('two_week_reminder_sent', 0)->orderBy('date')->get();
-	    if($events->count() > 0){
-		    $event = $events[0];
-		    $city_id = $event->city->id;
-		    $subscribers = SuscriberController::phoneSubscribersInCity($city_id);
+	    $two_weeks_comp = Carbon::now()->addWeeks(2)->subDay()->toDateString();
+	    $one_week = Carbon::now()->addWeek()->toDateString();
+        $one_week_comp = Carbon::now()->addWeek()->subDay()->toDateString();
 
-		    if(empty($event->text_message)){
-			    $event->two_week_reminder_sent = 2;
-			    $event->save();
-			    return;
-		    }
+	    $events_two_weeks = Event::public()->whereDate('date', '<=', $two_weeks)->whereDate('date', '>', $two_weeks_comp)->where('two_week_reminder_sent', 0)->get();
+	    $events_one_week = Event::public()->whereDate('date', '<=', $one_week)->whereDate('date', '>', $one_week_comp)->where('one_week_reminder_sent', 0)->get();
+
+	    foreach($events_two_weeks as $event){
+
+	        $subscribers = SuscriberController::phoneSubscribersInCity($event->city->id);
+
+            if(empty($event->text_message)){
+                $event->two_week_reminder_sent = 2;
+                $event->save();
+                report(new TextMessageException('Automated texts failed for event: ' . $event->id . ' No message in event, no texts sent.'));
+                continue;
+            }
 
             $event->two_week_reminder_sent = 1;
             $event->save();
+
             foreach($subscribers as $subscriber){
                 try{
                     $textMessager->text($subscriber, $event->text_message);
                 }catch(TextMessageException $e){
-                    $event->six_week_reminder_sent = 2;
+                    $event->two_week_reminder_sent = 2;
                     $event->save();
                     report(new TextMessageException('Automated messaging failed for event: ' . $event->id . ' At subscriber: ' . $subscriber->id));
-                    return;
+                    break;
                 }
 
             }
 
-	    }
 
+        }
+
+        foreach($events_one_week as $event){
+
+            $subscribers = SuscriberController::phoneSubscribersInCity($event->city->id);
+
+            if(empty($event->text_message)){
+                $event->one_week_reminder_sent = 2;
+                $event->save();
+                report(new TextMessageException('Automated texts failed for event: ' . $event->id . ' No message in event, no texts sent.'));
+                continue;
+            }
+
+            $event->one_week_reminder_sent = 1;
+            $event->save();
+
+            foreach($subscribers as $subscriber){
+                try{
+                    $textMessager->text($subscriber, $event->text_message);
+                }catch(TextMessageException $e){
+                    $event->one_week_reminder_sent = 2;
+                    $event->save();
+                    report(new TextMessageException('Automated messaging failed for event: ' . $event->id . ' At subscriber: ' . $subscriber->id));
+                    break;
+                }
+
+            }
+
+
+        }
     }
 }

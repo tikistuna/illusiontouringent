@@ -78,6 +78,10 @@
                     {!! Form::label('state', 'State:') !!}
                     {!! Form::text('state', null, ['class'=>'form-control']) !!}
                 </div>
+                <div class="form-group">
+                    {!! Form::label('full_state', 'Full State:') !!}
+                    {!! Form::text('full_state', null, ['class'=>'form-control']) !!}
+                </div>
                 <div class="form-group mt-5">
                     <a href="{{URL::previous()}}" class="btn btn-link text-light">Cancel</a>
                     {!! Form::submit('Submit', ['class'=>'btn btn-primary']) !!}
