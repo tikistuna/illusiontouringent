@@ -133,16 +133,21 @@ class SuscriberController extends Controller
 	 * Validate the specified phone number
 	 *
 	 * @param Request $request
+	 * @param TextMessager $textMessager
 	 * @param $phone
 	 * @param $validation_code
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
-    public function validate_phone(Request $request, $phone, $validation_code){
+    public function validate_phone(Request $request, TextMessager $textMessager, $phone, $validation_code){
 		if($phone = Phone::where('phone', '=', $phone)->first()){
 			if($phone->validation_code === $validation_code){
 				$phone->validation_code = 0;
 				$phone->status = 1;
 				$phone->save();
+
+				$msg = ["Felicidades, {$phone->name}", "te has", "registrado a L.J. Productions de", "manera exitosa!"];
+				[$event, $date, $venue, $description] = $msg;
+				$textMessager->text($phone, compact('event', 'date', 'venue', 'description'));
 			}else{
 				if(!$phone->status){
 					abort(400);
